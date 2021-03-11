@@ -20,19 +20,14 @@ public class Sneaker {
     private String sneakerName;
 
     @Field
-    private String usSize;
+    private long size;
 
     @Field
     private long priceBought;
 
     @Field
-    private long currentPrice;
-
-    @Field
     private long salePrice;
 
-    @Field
-    private byte[] invoice;
 
     public Sneaker() {
     }
