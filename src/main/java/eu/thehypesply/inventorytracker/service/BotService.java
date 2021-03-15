@@ -1,6 +1,7 @@
 package eu.thehypesply.inventorytracker.service;
 
 import eu.thehypesply.inventorytracker.model.Bot;
+import eu.thehypesply.inventorytracker.model.BotRental;
 
 import java.util.List;
 import java.util.Map;
@@ -13,4 +14,5 @@ public interface BotService {
     String createBot(Bot bot);
     void deleteBot(String botName);
     void updateBot(String botName, Map<String, Object> fields);
+    long addRentalIncome(String botname, BotRental botRental);
 }

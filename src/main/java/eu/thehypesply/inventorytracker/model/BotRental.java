@@ -1,32 +1,32 @@
 package eu.thehypesply.inventorytracker.model;
 
 import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 
+import java.time.LocalDate;
+
 @Data
 @Document
-public class Bot {
+public class BotRental {
 
     @Id
-    private String botName;
+    @Field
+    private String id;
 
     @Field
-    private long priceBought;
+    private LocalDate rentalDate;
 
     @Field
-    private long priceSold;
+    private LocalDate rentalExpiry;
 
     @Field
-    private long rentalIncome;
+    private long price;
 
-    @DBRef(lazy = true)
-    private BotRental botRental;
+    @DBRef
+    private Bot bot;
 
-    public Bot() {
-    }
+
 }

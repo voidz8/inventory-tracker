@@ -2,6 +2,7 @@ package eu.thehypesply.inventorytracker.service;
 
 import eu.thehypesply.inventorytracker.exception.BotNotFound;
 import eu.thehypesply.inventorytracker.model.Bot;
+import eu.thehypesply.inventorytracker.model.BotRental;
 import eu.thehypesply.inventorytracker.repository.BotRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -55,5 +56,12 @@ public class BotServiceImpl implements BotService{
         }
     }
     botRepository.save(bot);
+    }
+
+    @Override
+    public long addRentalIncome(String botname, BotRental botRental) {
+        Bot bot = botRepository.findById(botname).get();
+        bot.setRentalIncome(bot.getRentalIncome() + botRental.getPrice());
+        return bot.getRentalIncome();
     }
 }
