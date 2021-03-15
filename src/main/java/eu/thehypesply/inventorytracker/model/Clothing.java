@@ -13,6 +13,9 @@ public class Clothing {
 
     @Id
     @Field
+    private String id;
+
+    @Field
     private String name;
 
     @Field
@@ -20,9 +23,6 @@ public class Clothing {
 
     @Field
     private long priceSold;
-
-    @Field
-    private long value;
 
     public Clothing() {
     }

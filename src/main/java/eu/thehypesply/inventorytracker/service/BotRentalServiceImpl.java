@@ -5,6 +5,7 @@ import eu.thehypesply.inventorytracker.model.Bot;
 import eu.thehypesply.inventorytracker.model.BotRental;
 import eu.thehypesply.inventorytracker.repository.BotRentalRepository;
 import eu.thehypesply.inventorytracker.repository.BotRepository;
+import eu.thehypesply.inventorytracker.repository.TotalRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -20,7 +21,10 @@ public class BotRentalServiceImpl implements BotRentalService{
     private BotRentalRepository botRentalRepository;
 
     @Autowired
-    private BotRepository botRepository;
+    private TotalRepository totalRepository;
+
+//    @Autowired
+//    private BotRepository botRepository;
 
     @Override
     public List<BotRental> getAllBotRentals() {
@@ -36,11 +40,13 @@ public class BotRentalServiceImpl implements BotRentalService{
     @Override
     public String createBotRental(BotRental botRental) {
         BotRental newBotRental = botRentalRepository.save(botRental);
+
         return newBotRental.getBot().getBotName();
     }
 
     @Override
-    public void delteBotRental(String id) {
+    public void deleteBotRental(String id) {
+
         botRentalRepository.deleteById(id);
     }
 
