@@ -6,9 +6,6 @@ import org.openqa.selenium.chrome.ChromeDriver;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import javax.swing.text.html.Option;
-import java.io.IOException;
-import java.net.MalformedURLException;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -16,8 +13,8 @@ import java.util.Optional;
 @Service
 public class SneakerServiceImpl implements SneakerService{
 
-    private String URL = "https://stockx.com";
-    private ChromeDriver driver = new ChromeDriver();
+//    private String URL = "https://stockx.com";
+//    private ChromeDriver driver = new ChromeDriver();
 
     @Autowired
     private SneakerRepository sneakerRepository;

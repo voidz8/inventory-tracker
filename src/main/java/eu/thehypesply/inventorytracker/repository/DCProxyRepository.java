@@ -1,9 +1,9 @@
 package eu.thehypesply.inventorytracker.repository;
 
-import eu.thehypesply.inventorytracker.model.ResidentialProxy;
+import eu.thehypesply.inventorytracker.model.DCProxy;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface ResidentialProxyRepository extends MongoRepository<ResidentialProxy, String> {
+public interface DCProxyRepository extends MongoRepository<DCProxy, String>{
 }

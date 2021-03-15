@@ -8,7 +8,6 @@ import java.time.LocalDate;
 @Data
 public abstract class Proxy {
 
-    @Id
     @Field
     private String proxyCompany;
 
