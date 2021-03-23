@@ -35,7 +35,7 @@ public class SneakerController {
     @PostMapping(value = "")
     public ResponseEntity<Object> createSneaker(@RequestBody Sneaker sneaker){
     String newSneaker = sneakerService.createSneaker(sneaker);
-    return new ResponseEntity<>("Succesfully added pid: " + newSneaker, HttpStatus.CREATED);
+    return new ResponseEntity<>("Succesfully created pid: " + newSneaker, HttpStatus.CREATED);
     }
 
     @DeleteMapping(value = "/{pid}")
