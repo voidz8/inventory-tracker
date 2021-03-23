@@ -5,11 +5,13 @@ import eu.thehypesply.inventorytracker.model.Bot;
 import eu.thehypesply.inventorytracker.model.BotRental;
 import eu.thehypesply.inventorytracker.repository.BotRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+@Service
 public class BotServiceImpl implements BotService{
 
     @Autowired
