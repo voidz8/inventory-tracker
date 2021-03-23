@@ -1,7 +1,7 @@
 package eu.thehypesply.inventorytracker.controller;
 
 import eu.thehypesply.inventorytracker.model.Sneaker;
-import eu.thehypesply.inventorytracker.service.SneakerServiceImpl;
+import eu.thehypesply.inventorytracker.service.SneakerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,7 +21,7 @@ import java.util.Map;
 public class SneakerController {
 
     @Autowired
-    private SneakerServiceImpl sneakerService;
+    private SneakerService sneakerService;
 
     @GetMapping(value = "/all")
     public ResponseEntity<Object> getAllSneakers(){

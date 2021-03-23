@@ -1,7 +1,7 @@
 package eu.thehypesply.inventorytracker.controller;
 
 import eu.thehypesply.inventorytracker.model.Bot;
-import eu.thehypesply.inventorytracker.service.BotServiceImpl;
+import eu.thehypesply.inventorytracker.service.BotService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,7 +21,7 @@ import java.util.Map;
 public class BotController {
 
     @Autowired
-    private BotServiceImpl botService;
+    private BotService botService;
 
     @GetMapping(value = "/all")
     public ResponseEntity<Object> getAllBots(){
