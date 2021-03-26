@@ -1,6 +1,7 @@
 package eu.thehypesply.inventorytracker.model;
 
 import lombok.Data;
+import org.bson.types.Binary;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
@@ -24,6 +25,9 @@ public class Sneaker {
 
     @Field
     private long salePrice;
+
+    @Field
+    private Binary photo;
 
 
     public Sneaker() {
