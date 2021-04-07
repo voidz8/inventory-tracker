@@ -73,4 +73,15 @@ public class BotRentalServiceImpl implements BotRentalService{
     }
     botRentalRepository.save(rental);
     }
+
+    @Override
+    public long rentalIncome() {
+        List<BotRental> rentals = botRentalRepository.findAll();
+        long total = 0;
+        for (BotRental rental : rentals){
+            long value = rental.getPrice();
+            total = total + value;
+        }
+        return total;
+    }
 }

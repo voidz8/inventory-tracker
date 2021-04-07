@@ -50,4 +50,8 @@ public class BotRentalController {
         return new ResponseEntity<>("Successfully updated botrental.", HttpStatus.OK);
     }
 
+    @GetMapping(value = "/income")
+    public ResponseEntity<Object> rentalIncome(){
+        return new ResponseEntity<>("Your total rentalincome is $" + botRentalService.rentalIncome(), HttpStatus.OK);
+    }
 }

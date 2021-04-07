@@ -27,6 +27,4 @@ public class BotRental {
 
     @DBRef
     private Bot bot;
-
-
 }

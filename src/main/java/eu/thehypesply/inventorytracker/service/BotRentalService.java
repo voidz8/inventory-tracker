@@ -13,4 +13,5 @@ public interface BotRentalService {
     String createBotRental(BotRental botRental);
     void deleteBotRental(String id);
     void updateBotRental(String id, Map<String, Object> fields);
+    long rentalIncome();
 }
