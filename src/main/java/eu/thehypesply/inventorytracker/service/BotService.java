@@ -10,9 +10,11 @@ import java.util.Optional;
 public interface BotService {
 
     List<Bot> getAllBots();
-    Optional<Bot> getBot(String botName);
+    List<Bot> getBots(String botName);
     String createBot(Bot bot);
-    void deleteBot(String botName);
-    void updateBot(String botName, Map<String, Object> fields);
-    long addRentalIncome(String botname, BotRental botRental);
+    void deleteBot(String id);
+    void updateBot(String id, Map<String, Object> fields);
+    long totalBotInvestment();
+    long totalBotSales();
+    long totalBalance();
 }

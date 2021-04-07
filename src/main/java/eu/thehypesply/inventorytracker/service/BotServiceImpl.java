@@ -2,14 +2,12 @@ package eu.thehypesply.inventorytracker.service;
 
 import eu.thehypesply.inventorytracker.exception.BotNotFound;
 import eu.thehypesply.inventorytracker.model.Bot;
-import eu.thehypesply.inventorytracker.model.BotRental;
 import eu.thehypesply.inventorytracker.repository.BotRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 
 @Service
 public class BotServiceImpl implements BotService{
@@ -23,9 +21,9 @@ public class BotServiceImpl implements BotService{
     }
 
     @Override
-    public Optional<Bot> getBot(String botName) {
+    public List<Bot> getBots(String botName) {
         if (!botRepository.existsById(botName)){throw new BotNotFound();}
-        return botRepository.findById(botName);
+        return botRepository.findAllByBotName(botName);
     }
 
     @Override
@@ -35,15 +33,15 @@ public class BotServiceImpl implements BotService{
     }
 
     @Override
-    public void deleteBot(String botName) {
-        if (!botRepository.existsById(botName)){throw new BotNotFound();}
-        botRepository.deleteById(botName);
+    public void deleteBot(String id) {
+        if (!botRepository.existsById(id)){throw new BotNotFound();}
+        botRepository.deleteById(id);
     }
 
     @Override
-    public void updateBot(String botName, Map<String, Object> fields) {
-    if (!botRepository.existsById(botName)){throw new BotNotFound();}
-    Bot bot = botRepository.findById(botName).get();
+    public void updateBot(String id, Map<String, Object> fields) {
+    if (!botRepository.existsById(id)){throw new BotNotFound();}
+    Bot bot = botRepository.findById(id).get();
     for (String field : fields.keySet()){
         switch (field){
             case "priceBought":
@@ -61,9 +59,36 @@ public class BotServiceImpl implements BotService{
     }
 
     @Override
-    public long addRentalIncome(String botname, BotRental botRental) {
-        Bot bot = botRepository.findById(botname).get();
-        bot.setRentalIncome(bot.getRentalIncome() + botRental.getPrice());
-        return bot.getRentalIncome();
+    public long totalBotInvestment() {
+        List<Bot> bots = botRepository.findAll();
+        long total = 0;
+        for (Bot bot : bots){
+            long value = bot.getPriceBought();
+            total = total + value;
+        }
+        return total;
     }
+
+    @Override
+    public long totalBotSales() {
+        List<Bot> bots = botRepository.findAll();
+        long total = 0;
+        for (Bot bot : bots){
+            long value = bot.getPriceSold();
+            total = total + value;
+        }
+        return total;
+    }
+
+    @Override
+    public long totalBalance() {
+        return totalBotSales() - totalBotInvestment();
+    }
+
+//    @Override
+//    public long addRentalIncome(String id, BotRental botRental) {
+//        Bot bot = botRepository.findById(id).get();
+//        bot.setRentalIncome(bot.getRentalIncome() + botRental.getPrice());
+//        return bot.getRentalIncome();
+//    }
 }

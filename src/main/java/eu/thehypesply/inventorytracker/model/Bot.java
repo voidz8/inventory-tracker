@@ -13,6 +13,9 @@ import org.springframework.data.mongodb.core.mapping.Field;
 public class Bot {
 
     @Id
+    private String id;
+
+    @Field
     private String botName;
 
     @Field

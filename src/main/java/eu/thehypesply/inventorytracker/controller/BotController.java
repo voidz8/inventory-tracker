@@ -29,8 +29,8 @@ public class BotController {
     }
 
     @GetMapping(value = "/{botName}")
-    public ResponseEntity<Object> getBot(@PathVariable(value = "botName") String botName){
-        return new ResponseEntity<>(botService.getBot(botName), HttpStatus.OK);
+    public ResponseEntity<Object> getBots(@PathVariable(value = "botName") String botName){
+        return new ResponseEntity<>(botService.getBots(botName), HttpStatus.OK);
     }
 
     @PostMapping(value = "")
@@ -39,15 +39,30 @@ public class BotController {
         return new ResponseEntity<>("Successfully added: " + newBot, HttpStatus.CREATED);
     }
 
-    @DeleteMapping(value = "/{botName}")
-    public ResponseEntity<Object> deleteBot(@PathVariable(value = "botName") String botName){
-        botService.deleteBot(botName);
+    @DeleteMapping(value = "/{id}")
+    public ResponseEntity<Object> deleteBot(@PathVariable(value = "id") String id){
+        botService.deleteBot(id);
         return new ResponseEntity<>("Successfully deleted.",HttpStatus.NO_CONTENT);
     }
 
-    @PatchMapping(value = "/{botName}")
-    public ResponseEntity<Object> updateBot(@PathVariable(value = "botName") String botName, @RequestBody Map<String, Object> fields){
-        botService.updateBot(botName, fields);
-        return new ResponseEntity<>("Succesfully updated: " + botName, HttpStatus.OK);
+    @PatchMapping(value = "/{id}")
+    public ResponseEntity<Object> updateBot(@PathVariable(value = "id") String id, @RequestBody Map<String, Object> fields){
+        botService.updateBot(id, fields);
+        return new ResponseEntity<>("Succesfully updated", HttpStatus.OK);
+    }
+
+    @GetMapping(value = "/invested")
+    public ResponseEntity<Object> getTotalInvested(){
+        return new ResponseEntity<>("You have $" + botService.totalBotInvestment() + " invested in bots.", HttpStatus.OK);
+    }
+
+    @GetMapping(value = "/sold")
+    public ResponseEntity<Object> getTotalSold(){
+        return new ResponseEntity<>("Your total in sales is $" + botService.totalBotSales(), HttpStatus.OK);
+    }
+
+    @GetMapping(value = "/balance")
+    public ResponseEntity<Object> getBalance(){
+        return new ResponseEntity<>("Your balance is $" + botService.totalBalance(), HttpStatus.OK);
     }
 }
