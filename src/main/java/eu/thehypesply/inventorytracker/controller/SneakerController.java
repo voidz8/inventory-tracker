@@ -53,10 +53,19 @@ public class SneakerController {
         return new ResponseEntity<>("Succesfully updated sneaker with pid: " + pid+ ".", HttpStatus.OK);
     }
 
-//    @PostMapping(value = "/{pid}")
-//    public ResponseEntity<Object> addPhoto(@PathVariable(value = "pid") String pid, @RequestParam("photo")MultipartFile photo, Sneaker sneaker) throws IOException {
-//        sneakerService.addPhoto(pid, photo);
-//        return new ResponseEntity<>("Successfully found image." , HttpStatus.OK);
-//    }
+    @GetMapping(value = "/invested")
+    public ResponseEntity<Object> getTotalInvested(){
+        return new ResponseEntity<>("You have $"+ sneakerService.getTotalBought() + " invested in sneakers.", HttpStatus.OK);
+    }
+
+    @GetMapping(value = "/sold")
+    public ResponseEntity<Object> getTotalSold(){
+        return new ResponseEntity<>("Your total in sales is $" + sneakerService.getTotalSold(), HttpStatus.OK);
+    }
+
+    @GetMapping(value = "/balance")
+    public ResponseEntity<Object> getBalance(){
+       return new ResponseEntity<>("Your balance is $" + sneakerService.getBalance(), HttpStatus.OK);
+    }
 
 }

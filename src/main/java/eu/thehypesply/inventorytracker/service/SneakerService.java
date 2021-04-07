@@ -14,5 +14,8 @@ public interface SneakerService {
     String createSneaker(Sneaker sneaker) throws InterruptedException, IOException;
     void deleteSneaker(String pid);
     void updateSneaker(String pid, Map<String, Object> fields);
+    long getTotalBought();
+    long getTotalSold();
+    long getBalance();
 
 }

@@ -1,8 +1,6 @@
 package eu.thehypesply.inventorytracker.model;
 
 import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
@@ -15,13 +13,13 @@ public class Total {
     private String id;
 
     @Field
-    private long totalInvested;
+    private long totalInvested = 0;
 
     @Field
-    private long totalProfit;
+    private long totalProfit = 0;
 
     @Field
-    private long balance;
+    private long balance = 0;
 
 
     public Total() {

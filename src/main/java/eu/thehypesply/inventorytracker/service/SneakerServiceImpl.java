@@ -2,6 +2,7 @@ package eu.thehypesply.inventorytracker.service;
 import eu.thehypesply.inventorytracker.exception.SneakerNotFound;
 import eu.thehypesply.inventorytracker.model.Sneaker;
 import eu.thehypesply.inventorytracker.repository.SneakerRepository;
+import eu.thehypesply.inventorytracker.repository.TotalRepository;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
@@ -25,6 +26,9 @@ public class SneakerServiceImpl implements SneakerService{
 
     @Autowired
     private SneakerRepository sneakerRepository;
+
+    @Autowired
+    private TotalRepository totalRepository;
 
 
     public List<Sneaker> getAllSneakers(){return sneakerRepository.findAll();}
@@ -116,6 +120,33 @@ public class SneakerServiceImpl implements SneakerService{
             }
         }
         sneakerRepository.save(sneaker);
+    }
+
+    @Override
+    public long getTotalBought() {
+        List<Sneaker> sneakers = sneakerRepository.findAll();
+        long total = 0;
+        for (Sneaker sneaker : sneakers) {
+            long value = sneaker.getPriceBought();
+            total = total + value;
+        }
+        return total;
+    }
+
+    @Override
+    public long getTotalSold() {
+        List<Sneaker> sneakers = sneakerRepository.findAll();
+        long total = 0;
+        for (Sneaker sneaker : sneakers){
+            long value = sneaker.getSalePrice();
+            total = total + value;
+        }
+        return total;
+    }
+
+    @Override
+    public long getBalance() {
+        return getTotalSold() - getTotalBought();
     }
 
 
