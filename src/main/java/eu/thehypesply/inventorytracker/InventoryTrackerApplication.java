@@ -15,6 +15,11 @@ public class InventoryTrackerApplication {
 	}
 
 	@PostConstruct
+	private void seleniumConfig(){
+		System.setProperty("webdriver.chrome.drive", "C:/Users/renzo/OneDrive/Documenten/programming");
+	}
+
+	@PostConstruct
 	private void initDatabase(){
 
 	}

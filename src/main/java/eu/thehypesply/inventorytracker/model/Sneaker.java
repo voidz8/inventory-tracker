@@ -18,16 +18,16 @@ public class Sneaker {
     private String sneakerName;
 
     @Field
-    private long size;
+    private Long size;
 
     @Field
-    private long priceBought;
+    private Long priceBought;
 
     @Field
-    private long salePrice;
+    private Long salePrice;
 
     @Field
-    private Binary photo;
+    private byte[] photo;
 
 
     public Sneaker() {
