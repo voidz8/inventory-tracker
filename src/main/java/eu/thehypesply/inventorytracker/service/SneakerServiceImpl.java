@@ -47,7 +47,7 @@ public class SneakerServiceImpl implements SneakerService{
         newSneaker.setPid(sneaker.getPid());
         newSneaker.setSize(sneaker.getSize());
         newSneaker.setPriceBought(sneaker.getPriceBought());
-        //load yahoo + accept cookies
+        //load stockx and close popup
         driver.get(url);
         Thread.sleep(1200);
         driver.findElement(By.xpath("//button[@aria-label='Close']")).click();
@@ -56,34 +56,39 @@ public class SneakerServiceImpl implements SneakerService{
         driver.findElement(By.name("q")).sendKeys(sneaker.getPid(), Keys.ENTER);
         Thread.sleep(1100);
         //load sneaker page
-        driver.findElement(By.xpath("//*[@id='main-content']/div[2]/div[2]/div")).click();
-        Thread.sleep(1400);
-        //get sneakername
-        String title = driver.getTitle();
-        String name = title.substring(0,title.indexOf("-"));
-        //get image url
-        WebElement img = driver.findElement(By.xpath("//img[@type='image/jpeg']"));
-        String imUrl = img.getAttribute("srcset");
-        int lastIndex = imUrl.indexOf(".jpg")+4;
-        URL imageUrl = new URL(imUrl.substring(0,lastIndex));
-        //get image
-        InputStream in = new BufferedInputStream(imageUrl.openStream());
-        ByteArrayOutputStream out = new ByteArrayOutputStream();
-        byte[] buf = new byte[1024];
-        int n;
-        while (-1!=(n=in.read(buf)))
-        {
-            out.write(buf, 0, n);
+        try {
+            driver.findElement(By.xpath("//*[@id='main-content']/div[2]/div[2]/div")).click();
+            Thread.sleep(1400);
+            //get sneakername
+            String title = driver.getTitle();
+            String name = title.substring(0,title.indexOf("-"));
+            //get image url
+            WebElement img = driver.findElement(By.xpath("//img[@type='image/jpeg']"));
+            String imUrl = img.getAttribute("srcset");
+            int lastIndex = imUrl.indexOf(".jpg")+4;
+            URL imageUrl = new URL(imUrl.substring(0,lastIndex));
+            //get image
+            InputStream in = new BufferedInputStream(imageUrl.openStream());
+            ByteArrayOutputStream out = new ByteArrayOutputStream();
+            byte[] buf = new byte[1024];
+            int n;
+            while (-1!=(n=in.read(buf)))
+            {
+                out.write(buf, 0, n);
+            }
+            out.close();
+            in.close();
+            byte[] image = out.toByteArray();
+            //set image
+            newSneaker.setPhoto(image);
+            //set name
+            newSneaker.setSneakerName(name);
+            driver.close();
+            sneakerRepository.save(newSneaker);
+        }catch (Exception e){
+            System.out.println("Can't find sneaker with stylecode " + sneaker.getPid() +" try to add the sneaker manually.");
         }
-        out.close();
-        in.close();
-        byte[] image = out.toByteArray();
-        //set image
-        newSneaker.setPhoto(image);
-        //set name
-        newSneaker.setSneakerName(name);
-        driver.close();
-        sneakerRepository.save(newSneaker);
+
         return newSneaker.getSneakerName();
 
     }
