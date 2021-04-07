@@ -13,4 +13,7 @@ public interface ClothingService {
     String createClothing(Clothing clothing);
     void deleteClothing(String id);
     void updateClothing(String id, Map<String, Object> fields);
+    long getTotalBought();
+    long getTotalSold();
+    long getBalance();
 }

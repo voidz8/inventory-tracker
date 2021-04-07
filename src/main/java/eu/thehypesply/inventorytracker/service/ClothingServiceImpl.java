@@ -57,4 +57,31 @@ public class ClothingServiceImpl implements ClothingService{
         }
         clothingRepository.save(item);
     }
+
+    @Override
+    public long getTotalBought() {
+        List<Clothing> allClothing = clothingRepository.findAll();
+        long total = 0;
+        for (Clothing clothing : allClothing){
+            long value = clothing.getPriceBought();
+            total = total + value;
+        }
+        return total;
+    }
+
+    @Override
+    public long getTotalSold() {
+        List<Clothing> allClothing = clothingRepository.findAll();
+        long total = 0;
+        for (Clothing clothing : allClothing){
+            long value = clothing.getPriceSold();
+            total = total + value;
+        }
+        return total;
+    }
+
+    @Override
+    public long getBalance() {
+        return getTotalSold() - getTotalBought();
+    }
 }
