@@ -21,4 +21,6 @@ public class Image {
     @Field
     private byte[] data;
 
+    public Image(String fileName, String contentType, byte[] bytes) {
+    }
 }
