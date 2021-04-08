@@ -29,6 +29,12 @@ public class DCProxyServiceImpl implements DCProxyService {
     }
 
     @Override
+    public List<DCProxy> getDcProxyByCompany(String proxyCompany) {
+        if (!dcProxyRepository.existsByProxyCompany(proxyCompany)){throw new ProxyNotFound("No proxies found for this provider");}
+        return dcProxyRepository.findByProxyCompany(proxyCompany);
+    }
+
+    @Override
     public String createDCProxy(DCProxy dcProxy) {
         DCProxy newProxy = dcProxyRepository.save(dcProxy);
         return newProxy.getProxyCompany();
@@ -61,5 +67,16 @@ public class DCProxyServiceImpl implements DCProxyService {
     @Override
     public void deleteDCProxy(String id) {
     dcProxyRepository.deleteById(id);
+    }
+
+    @Override
+    public long spendOnDcProxies() {
+        List<DCProxy> dcProxies = dcProxyRepository.findAll();
+        long total = 0;
+        for (DCProxy proxy : dcProxies){
+            long value = proxy.getPrice();
+            total = total + value;
+        }
+        return total;
     }
 }
