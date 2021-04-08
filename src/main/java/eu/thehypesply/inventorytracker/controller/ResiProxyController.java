@@ -1,8 +1,7 @@
 package eu.thehypesply.inventorytracker.controller;
 
-import eu.thehypesply.inventorytracker.model.DCProxy;
-import eu.thehypesply.inventorytracker.repository.DCProxyRepository;
-import eu.thehypesply.inventorytracker.service.DCProxyService;
+import eu.thehypesply.inventorytracker.model.ResiProxy;
+import eu.thehypesply.inventorytracker.service.ResiProxyService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,48 +17,48 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.Map;
 
 @RestController
-@RequestMapping(value = "/dcproxy")
-public class DCProxyController {
+@RequestMapping(value = "resiproxy")
+public class ResiProxyController {
 
     @Autowired
-    private DCProxyService dcProxyService;
+    private ResiProxyService resiProxyService;
 
     @GetMapping(value = "/all")
-    public ResponseEntity<Object> getAllDcProxies(){
-        return new ResponseEntity<>(dcProxyService.getAllDCProxies(), HttpStatus.OK);
+    public ResponseEntity<Object> getAllProxies(){
+        return new ResponseEntity<>(resiProxyService.getAllProxies(), HttpStatus.OK);
     }
 
     @GetMapping(value = "/{id}")
     public ResponseEntity<Object> getProxy(@PathVariable(value = "id") String id){
-        return new ResponseEntity<>(dcProxyService.getDCProxy(id), HttpStatus.OK);
+        return new ResponseEntity<>(resiProxyService.getProxy(id), HttpStatus.OK);
     }
 
     @GetMapping(value = "/{proxyCompany}")
-    public ResponseEntity<Object> getProxyByCompanyName(@PathVariable(value = "proxyCompany") String proxycompany){
-        return new ResponseEntity<>(dcProxyService.getDcProxyByCompany(proxycompany), HttpStatus.OK);
+    public ResponseEntity<Object> getProxiesByCompany(@PathVariable(value = "proxyCompany") String proxyCompany){
+        return new ResponseEntity<>(resiProxyService.getProxiesByCompany(proxyCompany), HttpStatus.OK);
     }
 
-    @PostMapping(value = "")
-    public ResponseEntity<Object> createProxy(@RequestBody DCProxy dcProxy){
-        String newProxy = dcProxyService.createDCProxy(dcProxy);
+    @PostMapping(value = "/{id}")
+    public ResponseEntity<Object> createProxy(@RequestBody ResiProxy resiProxy){
+        String newProxy = resiProxyService.createProxy(resiProxy);
         return new ResponseEntity<>("Successfully added new proxy " + newProxy, HttpStatus.CREATED);
     }
 
     @PatchMapping(value = "/{id}")
     public ResponseEntity<Object> updateProxy(@PathVariable(value = "id") String id, @RequestBody Map<String, Object> fields){
-        dcProxyService.updateDCProxy(id, fields);
-        return new ResponseEntity<>("Succesfully updated", HttpStatus.OK);
+        resiProxyService.updateProxy(id, fields);
+        return new ResponseEntity<>("Successfully updated.", HttpStatus.OK);
     }
 
     @DeleteMapping(value = "/{id}")
     public ResponseEntity<Object> deleteProxy(@PathVariable(value = "id") String id){
-        dcProxyService.deleteDCProxy(id);
-        return new ResponseEntity<>("Succesfully deleted", HttpStatus.NO_CONTENT);
+        resiProxyService.deleteProxy(id);
+        return new ResponseEntity<>("Successfully deleted." , HttpStatus.NO_CONTENT);
     }
 
     @GetMapping(value = "/invested")
-    public ResponseEntity<Object> spendOnDcProxies(){
-        return new ResponseEntity<>("You have spend $" + dcProxyService.spendOnDcProxies() + " on datacenter proxies.", HttpStatus.OK);
+    public ResponseEntity<Object> spendOnResiProxies(){
+        return new ResponseEntity<>("You have spend $" + resiProxyService.spendOnProxies() + " on residential proxies.", HttpStatus.OK);
     }
 
 }

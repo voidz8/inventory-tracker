@@ -29,6 +29,12 @@ public class ResiProxyServiceImpl implements ResiProxyService{
     }
 
     @Override
+    public List<ResiProxy> getProxiesByCompany(String proxyCompany) {
+        if (!resiProxyRepository.existsByProxyCompany(proxyCompany)){throw new ProxyNotFound("No proxies found for this provider");}
+        return resiProxyRepository.findByProxyCompany(proxyCompany);
+    }
+
+    @Override
     public String createProxy(ResiProxy resiProxy) {
         ResiProxy newProxy = resiProxyRepository.save(resiProxy);
         return newProxy.getProxyCompany();
@@ -61,5 +67,16 @@ public class ResiProxyServiceImpl implements ResiProxyService{
     @Override
     public void deleteProxy(String id) {
     resiProxyRepository.deleteById(id);
+    }
+
+    @Override
+    public long spendOnProxies() {
+        List<ResiProxy> proxies = resiProxyRepository.findAll();
+        long total = 0;
+        for (ResiProxy proxy : proxies){
+            long value = proxy.getPrice();
+            total = total + value;
+        }
+        return total;
     }
 }

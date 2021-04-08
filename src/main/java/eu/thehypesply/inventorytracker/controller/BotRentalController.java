@@ -35,7 +35,7 @@ public class BotRentalController {
     @PostMapping(value = "")
     public ResponseEntity<Object> createBotRental(@RequestBody BotRental botRental){
         String newBotRental = botRentalService.createBotRental(botRental);
-        return new ResponseEntity<>("Successfully created a " + newBotRental+" botrental.", HttpStatus.OK);
+        return new ResponseEntity<>("Successfully created a " + newBotRental+" botrental.", HttpStatus.CREATED);
     }
 
     @DeleteMapping(value = "/{id}")

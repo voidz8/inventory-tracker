@@ -1,7 +1,6 @@
 package eu.thehypesply.inventorytracker.repository;
 
 import eu.thehypesply.inventorytracker.model.DCProxy;
-import org.springframework.data.domain.Example;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.stereotype.Repository;
 
