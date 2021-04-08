@@ -33,6 +33,6 @@ public class ImageServiceImpl implements ImageService{
 
     @Override
     public void deleteImage(String id) {
-
+        imageRepository.deleteById(id);
     }
 }

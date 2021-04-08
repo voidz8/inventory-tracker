@@ -1,6 +1,7 @@
 package eu.thehypesply.inventorytracker.controller;
 
 import eu.thehypesply.inventorytracker.model.Sneaker;
+import eu.thehypesply.inventorytracker.service.ImageService;
 import eu.thehypesply.inventorytracker.service.SneakerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -12,7 +13,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -26,13 +26,16 @@ public class SneakerController {
     @Autowired
     private SneakerService sneakerService;
 
+    @Autowired
+    private ImageService imageService;
+
     @GetMapping(value = "/all")
     public ResponseEntity<Object> getAllSneakers(){
         return new ResponseEntity<>(sneakerService.getAllSneakers(), HttpStatus.OK);
     }
-    @GetMapping(value = "/{pid}")
-    public ResponseEntity<Object> getSneaker(@PathVariable(value = "pid") String pid){
-        return new ResponseEntity<>(sneakerService.getSneaker(pid), HttpStatus.OK);
+    @GetMapping(value = "/{id}")
+    public ResponseEntity<Object> getSneaker(@PathVariable(value = "id") String id){
+        return new ResponseEntity<>(sneakerService.getSneaker(id), HttpStatus.OK);
     }
 
     @PostMapping(value = "")
@@ -41,16 +44,16 @@ public class SneakerController {
     return new ResponseEntity<>("Succesfully created: " + newSneaker, HttpStatus.CREATED);
     }
 
-    @DeleteMapping(value = "/{pid}")
-    public ResponseEntity<Object> deleteSneaker(@PathVariable(value = "pid")String pid){
-        sneakerService.deleteSneaker(pid);
+    @DeleteMapping(value = "/{id}")
+    public ResponseEntity<Object> deleteSneaker(@PathVariable(value = "id")String id){
+        sneakerService.deleteSneaker(id);
         return new ResponseEntity<>("Successfully deleted.",HttpStatus.NO_CONTENT);
     }
 
-    @PatchMapping(value = "/{pid}")
-    public ResponseEntity<Object> updateSneaker(@PathVariable(value = "pid")String pid, @RequestBody Map<String, Object> fields){
-        sneakerService.updateSneaker(pid,fields);
-        return new ResponseEntity<>("Succesfully updated sneaker with pid: " + pid+ ".", HttpStatus.OK);
+    @PatchMapping(value = "/{id}")
+    public ResponseEntity<Object> updateSneaker(@PathVariable(value = "id")String id, @RequestBody Map<String, Object> fields){
+        sneakerService.updateSneaker(id,fields);
+        return new ResponseEntity<>("Succesfully updated sneaker with pid: " + id+ ".", HttpStatus.OK);
     }
 
     @GetMapping(value = "/invested")
@@ -67,5 +70,12 @@ public class SneakerController {
     public ResponseEntity<Object> getBalance(){
        return new ResponseEntity<>("Your balance is $" + sneakerService.getBalance(), HttpStatus.OK);
     }
+
+
+//todo
+//    @PostMapping(value = "/{id}/invoice")
+//    public ResponseEntity<Object> addInvoice(@PathVariable(value = "id")String id){
+//
+//    }
 
 }

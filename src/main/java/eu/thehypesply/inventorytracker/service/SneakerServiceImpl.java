@@ -1,6 +1,7 @@
 package eu.thehypesply.inventorytracker.service;
 import eu.thehypesply.inventorytracker.exception.SneakerNotFound;
 import eu.thehypesply.inventorytracker.model.Sneaker;
+import eu.thehypesply.inventorytracker.repository.ImageRepository;
 import eu.thehypesply.inventorytracker.repository.SneakerRepository;
 import eu.thehypesply.inventorytracker.repository.TotalRepository;
 import org.openqa.selenium.By;
@@ -11,6 +12,7 @@ import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.io.BufferedInputStream;
 import java.io.ByteArrayOutputStream;
@@ -28,12 +30,15 @@ public class SneakerServiceImpl implements SneakerService{
     private SneakerRepository sneakerRepository;
 
     @Autowired
+    private ImageService imageService;
+
+    @Autowired
     private TotalRepository totalRepository;
 
 
     public List<Sneaker> getAllSneakers(){return sneakerRepository.findAll();}
 
-    public Optional<Sneaker> getSneaker(String pid){return sneakerRepository.findById(pid);}
+    public Optional<Sneaker> getSneaker(String id){return sneakerRepository.findById(id);}
 
     public String createSneaker(Sneaker sneaker) throws InterruptedException, IOException {
         System.setProperty("webdriver.chrome.driver", "C://Users//renzo//OneDrive//Documenten//programming//chromedriver.exe");
@@ -48,6 +53,7 @@ public class SneakerServiceImpl implements SneakerService{
         WebDriver driver = new ChromeDriver(options);
 
         Sneaker newSneaker = new Sneaker();
+        newSneaker.setId(sneaker.getId());
         newSneaker.setPid(sneaker.getPid());
         newSneaker.setSize(sneaker.getSize());
         newSneaker.setPriceBought(sneaker.getPriceBought());
@@ -97,15 +103,15 @@ public class SneakerServiceImpl implements SneakerService{
 
     }
 
-    public void deleteSneaker(String pid) {
-        if (!sneakerRepository.existsById(pid)) {throw new SneakerNotFound();}
-        sneakerRepository.deleteById(pid);
+    public void deleteSneaker(String id) {
+        if (!sneakerRepository.existsById(id)) {throw new SneakerNotFound();}
+        sneakerRepository.deleteById(id);
     }
 
     @Override
-    public void updateSneaker(String pid, Map<String, Object> fields) {
-        if (!sneakerRepository.existsById(pid)) {throw new SneakerNotFound();}
-        Sneaker sneaker = sneakerRepository.findById(pid).get();
+    public void updateSneaker(String id, Map<String, Object> fields) {
+        if (!sneakerRepository.existsById(id)) {throw new SneakerNotFound();}
+        Sneaker sneaker = sneakerRepository.findById(id).get();
         for (String field : fields.keySet()){
             switch (field){
                 case "size":
@@ -149,5 +155,11 @@ public class SneakerServiceImpl implements SneakerService{
         return getTotalSold() - getTotalBought();
     }
 
-
+    @Override
+    public void uploadInvoice(String id, MultipartFile file) {
+        if (!sneakerRepository.existsById(id)){throw new SneakerNotFound();}
+        Sneaker newSneaker = sneakerRepository.findById(id).get();
+        newSneaker.setInvoice(imageService.storeImage(file));
+        sneakerRepository.save(newSneaker);
+    }
 }

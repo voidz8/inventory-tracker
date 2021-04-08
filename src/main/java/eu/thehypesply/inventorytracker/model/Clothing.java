@@ -24,6 +24,9 @@ public class Clothing {
     @Field
     private long priceSold;
 
+    @Field
+    private Image invoice;
+
     public Clothing() {
     }
 }
