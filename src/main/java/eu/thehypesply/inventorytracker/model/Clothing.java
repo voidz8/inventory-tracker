@@ -12,7 +12,6 @@ import org.springframework.data.mongodb.core.mapping.Field;
 public class Clothing {
 
     @Id
-    @Field
     private String id;
 
     @Field

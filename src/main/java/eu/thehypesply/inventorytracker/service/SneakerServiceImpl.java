@@ -1,5 +1,7 @@
 package eu.thehypesply.inventorytracker.service;
+import eu.thehypesply.inventorytracker.exception.ImageStorageException;
 import eu.thehypesply.inventorytracker.exception.SneakerNotFound;
+import eu.thehypesply.inventorytracker.model.Image;
 import eu.thehypesply.inventorytracker.model.Sneaker;
 import eu.thehypesply.inventorytracker.repository.ImageRepository;
 import eu.thehypesply.inventorytracker.repository.SneakerRepository;
@@ -12,6 +14,7 @@ import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.BufferedInputStream;
@@ -21,6 +24,7 @@ import java.io.InputStream;
 import java.net.URL;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Optional;
 
 @Service
@@ -44,7 +48,7 @@ public class SneakerServiceImpl implements SneakerService{
         System.setProperty("webdriver.chrome.driver", "C://Users//renzo//OneDrive//Documenten//programming//chromedriver.exe");
         ChromeOptions options = new ChromeOptions();
         String userAgent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/89.0.4389.114 Safari/537.36";
-        options.addArguments("--headless");
+        //options.addArguments("--headless");
         options.addArguments("user-agent="+userAgent);
         options.addArguments("--disable-web-security");
         options.addArguments("--allow-running-insecure-content");
@@ -156,10 +160,9 @@ public class SneakerServiceImpl implements SneakerService{
     }
 
     @Override
-    public void uploadInvoice(String id, MultipartFile file) {
+    public void uploadInvoice(String id, Image image) {
         if (!sneakerRepository.existsById(id)){throw new SneakerNotFound();}
         Sneaker newSneaker = sneakerRepository.findById(id).get();
-        newSneaker.setInvoice(imageService.storeImage(file));
-        sneakerRepository.save(newSneaker);
+        newSneaker.setInvoice(image);
     }
 }

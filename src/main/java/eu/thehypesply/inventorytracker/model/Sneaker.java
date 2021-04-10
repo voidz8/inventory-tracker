@@ -11,7 +11,6 @@ import org.springframework.data.mongodb.core.mapping.Field;
 public class Sneaker {
 
     @Id
-    @Field
     private String id;
 
     @Field

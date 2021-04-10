@@ -1,5 +1,6 @@
 package eu.thehypesply.inventorytracker.controller;
 
+import eu.thehypesply.inventorytracker.model.Image;
 import eu.thehypesply.inventorytracker.model.Sneaker;
 import eu.thehypesply.inventorytracker.service.ImageService;
 import eu.thehypesply.inventorytracker.service.SneakerService;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -72,10 +74,12 @@ public class SneakerController {
     }
 
 
-//todo
-//    @PostMapping(value = "/{id}/invoice")
-//    public ResponseEntity<Object> addInvoice(@PathVariable(value = "id")String id){
-//
-//    }
+
+    @PostMapping(value = "/{id}/invoice")
+    public ResponseEntity<Object> addInvoice(@PathVariable(value = "id")String id, @RequestParam("file") MultipartFile file){
+        Image image = imageService.storeImage(file);
+        sneakerService.uploadInvoice(id, image);
+        return new ResponseEntity<>("Succesfully uploaded invoice.", HttpStatus.OK);
+    }
 
 }

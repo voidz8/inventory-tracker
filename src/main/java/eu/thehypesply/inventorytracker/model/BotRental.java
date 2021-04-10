@@ -13,7 +13,6 @@ import java.time.LocalDate;
 public class BotRental {
 
     @Id
-    @Field
     private String id;
 
     @Field
