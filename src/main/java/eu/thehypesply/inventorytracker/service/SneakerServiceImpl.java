@@ -162,7 +162,8 @@ public class SneakerServiceImpl implements SneakerService{
     @Override
     public void uploadInvoice(String id, Image image) {
         if (!sneakerRepository.existsById(id)){throw new SneakerNotFound();}
-        Sneaker newSneaker = sneakerRepository.findById(id).get();
-        newSneaker.setInvoice(image);
+        Sneaker sneaker = sneakerRepository.findById(id).get();
+        sneaker.setInvoice(image);
+        sneakerRepository.save(sneaker);
     }
 }
