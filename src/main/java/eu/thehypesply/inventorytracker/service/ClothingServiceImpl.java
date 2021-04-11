@@ -2,6 +2,7 @@ package eu.thehypesply.inventorytracker.service;
 
 import eu.thehypesply.inventorytracker.exception.ClothingNotFound;
 import eu.thehypesply.inventorytracker.model.Clothing;
+import eu.thehypesply.inventorytracker.model.Image;
 import eu.thehypesply.inventorytracker.repository.ClothingRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -83,5 +84,13 @@ public class ClothingServiceImpl implements ClothingService{
     @Override
     public long getBalance() {
         return getTotalSold() - getTotalBought();
+    }
+
+    @Override
+    public void uploadInvoice(String id, Image image) {
+        if (!clothingRepository.existsById(id)){throw new ClothingNotFound();}
+        Clothing clothing = clothingRepository.findById(id).get();
+        clothing.setInvoice(image);
+        clothingRepository.save(clothing);
     }
 }

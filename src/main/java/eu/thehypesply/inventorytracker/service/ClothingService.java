@@ -1,6 +1,7 @@
 package eu.thehypesply.inventorytracker.service;
 
 import eu.thehypesply.inventorytracker.model.Clothing;
+import eu.thehypesply.inventorytracker.model.Image;
 
 import java.util.List;
 import java.util.Map;
@@ -16,4 +17,5 @@ public interface ClothingService {
     long getTotalBought();
     long getTotalSold();
     long getBalance();
+    void uploadInvoice(String id, Image image);
 }
