@@ -15,7 +15,6 @@ import java.time.LocalDate;
 @Document(collection = "DatacenterProxies")
 public class DCProxy extends Proxy {
 
-    @Field
     @Id
     private String id;
 

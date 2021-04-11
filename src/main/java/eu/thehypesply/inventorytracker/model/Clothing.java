@@ -12,7 +12,6 @@ import org.springframework.data.mongodb.core.mapping.Field;
 public class Clothing {
 
     @Id
-    @Field
     private String id;
 
     @Field
@@ -23,6 +22,9 @@ public class Clothing {
 
     @Field
     private long priceSold;
+
+    @Field
+    private Image invoice;
 
     public Clothing() {
     }

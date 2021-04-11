@@ -16,7 +16,6 @@ import java.time.LocalDate;
 public class ResiProxy extends Proxy {
 
     @Id
-    @Field
     private String id;
 
     @Field

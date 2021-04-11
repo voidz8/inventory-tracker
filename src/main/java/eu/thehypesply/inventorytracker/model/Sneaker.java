@@ -10,8 +10,10 @@ import org.springframework.data.mongodb.core.mapping.Field;
 @Data
 public class Sneaker {
 
-    @Field
     @Id
+    private String id;
+
+    @Field
     private String pid;
 
     @Field
@@ -28,6 +30,9 @@ public class Sneaker {
 
     @Field
     private byte[] photo;
+
+    @Field
+    private Image invoice;
 
 
     public Sneaker() {

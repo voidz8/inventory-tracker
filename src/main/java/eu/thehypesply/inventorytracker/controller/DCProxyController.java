@@ -1,8 +1,10 @@
 package eu.thehypesply.inventorytracker.controller;
 
 import eu.thehypesply.inventorytracker.model.DCProxy;
+import eu.thehypesply.inventorytracker.model.Image;
 import eu.thehypesply.inventorytracker.repository.DCProxyRepository;
 import eu.thehypesply.inventorytracker.service.DCProxyService;
+import eu.thehypesply.inventorytracker.service.ImageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,7 +15,9 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.Map;
 
@@ -23,6 +27,9 @@ public class DCProxyController {
 
     @Autowired
     private DCProxyService dcProxyService;
+
+    @Autowired
+    private ImageService imageService;
 
     @GetMapping(value = "/all")
     public ResponseEntity<Object> getAllDcProxies(){
@@ -62,4 +69,10 @@ public class DCProxyController {
         return new ResponseEntity<>("You have spend $" + dcProxyService.spendOnDcProxies() + " on datacenter proxies.", HttpStatus.OK);
     }
 
+    @PostMapping(value = "/{id}/invoice")
+    public ResponseEntity<Object> addInvoice(@PathVariable(value = "id") String id, @RequestParam("file")MultipartFile file){
+        Image image = imageService.storeImage(file);
+        dcProxyService.uploadInvoice(id, image);
+        return new ResponseEntity<>("Successfully uploaded invoice.", HttpStatus.OK);
+    }
 }

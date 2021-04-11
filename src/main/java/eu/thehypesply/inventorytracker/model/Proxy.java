@@ -18,7 +18,7 @@ public abstract class Proxy {
     private LocalDate expiryDate;
 
     @Field
-    private byte[] invoice;
+    private Image invoice;
 
     public Proxy() {
     }
