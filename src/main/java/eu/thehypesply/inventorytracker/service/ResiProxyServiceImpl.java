@@ -1,6 +1,7 @@
 package eu.thehypesply.inventorytracker.service;
 
 import eu.thehypesply.inventorytracker.exception.ProxyNotFound;
+import eu.thehypesply.inventorytracker.model.Image;
 import eu.thehypesply.inventorytracker.model.ResiProxy;
 import eu.thehypesply.inventorytracker.repository.ResiProxyRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -78,5 +79,13 @@ public class ResiProxyServiceImpl implements ResiProxyService{
             total = total + value;
         }
         return total;
+    }
+
+    @Override
+    public void uploadInvoice(String id, Image image) {
+        if (!resiProxyRepository.existsById(id)){throw new ProxyNotFound();}
+        ResiProxy resiProxy = resiProxyRepository.findById(id).get();
+        resiProxy.setInvoice(image);
+        resiProxyRepository.save(resiProxy);
     }
 }

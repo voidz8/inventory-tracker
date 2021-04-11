@@ -2,6 +2,7 @@ package eu.thehypesply.inventorytracker.service;
 
 import eu.thehypesply.inventorytracker.exception.ProxyNotFound;
 import eu.thehypesply.inventorytracker.model.DCProxy;
+import eu.thehypesply.inventorytracker.model.Image;
 import eu.thehypesply.inventorytracker.repository.DCProxyRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -78,5 +79,13 @@ public class DCProxyServiceImpl implements DCProxyService {
             total = total + value;
         }
         return total;
+    }
+
+    @Override
+    public void uploadInvoice(String id, Image image) {
+        if (!dcProxyRepository.existsById(id)){throw new ProxyNotFound();}
+        DCProxy dcProxy = dcProxyRepository.findById(id).get();
+        dcProxy.setInvoice(image);
+        dcProxyRepository.save(dcProxy);
     }
 }

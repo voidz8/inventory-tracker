@@ -1,5 +1,6 @@
 package eu.thehypesply.inventorytracker.service;
 
+import eu.thehypesply.inventorytracker.model.Image;
 import eu.thehypesply.inventorytracker.model.ResiProxy;
 
 import java.util.List;
@@ -15,4 +16,5 @@ public interface ResiProxyService {
     void updateProxy(String id, Map<String, Object> fields);
     void deleteProxy(String id);
     long spendOnProxies();
+    void uploadInvoice(String id, Image image);
 }

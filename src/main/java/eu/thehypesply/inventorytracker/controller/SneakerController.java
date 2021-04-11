@@ -79,7 +79,7 @@ public class SneakerController {
     public ResponseEntity<Object> addInvoice(@PathVariable(value = "id")String id, @RequestParam("file") MultipartFile file){
         Image image = imageService.storeImage(file);
         sneakerService.uploadInvoice(id, image);
-        return new ResponseEntity<>("Succesfully uploaded invoice.", HttpStatus.OK);
+        return new ResponseEntity<>("Successfully uploaded invoice.", HttpStatus.OK);
     }
 
 }

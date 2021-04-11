@@ -1,6 +1,8 @@
 package eu.thehypesply.inventorytracker.controller;
 
+import eu.thehypesply.inventorytracker.model.Image;
 import eu.thehypesply.inventorytracker.model.ResiProxy;
+import eu.thehypesply.inventorytracker.service.ImageService;
 import eu.thehypesply.inventorytracker.service.ResiProxyService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -12,7 +14,9 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.Map;
 
@@ -22,6 +26,9 @@ public class ResiProxyController {
 
     @Autowired
     private ResiProxyService resiProxyService;
+
+    @Autowired
+    private ImageService imageService;
 
     @GetMapping(value = "/all")
     public ResponseEntity<Object> getAllProxies(){
@@ -61,4 +68,10 @@ public class ResiProxyController {
         return new ResponseEntity<>("You have spend $" + resiProxyService.spendOnProxies() + " on residential proxies.", HttpStatus.OK);
     }
 
+    @PostMapping(value = "/{id}/invoice")
+    public ResponseEntity<Object> addInvoice(@PathVariable(value = "id") String id, @RequestParam("file")MultipartFile file){
+        Image image = imageService.storeImage(file);
+        resiProxyService.uploadInvoice(id, image);
+        return new ResponseEntity<>("Successfully uploade invoice", HttpStatus.OK);
+    }
 }

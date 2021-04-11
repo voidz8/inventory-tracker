@@ -1,6 +1,7 @@
 package eu.thehypesply.inventorytracker.service;
 
 import eu.thehypesply.inventorytracker.model.DCProxy;
+import eu.thehypesply.inventorytracker.model.Image;
 
 import java.util.List;
 import java.util.Map;
@@ -14,4 +15,5 @@ public interface DCProxyService {
     void updateDCProxy(String id, Map<String, Object> fields);
     void deleteDCProxy(String id);
     long spendOnDcProxies();
+    void uploadInvoice(String id, Image image);
 }
