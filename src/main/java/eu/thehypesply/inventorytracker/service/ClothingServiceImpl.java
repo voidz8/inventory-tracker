@@ -17,6 +17,9 @@ public class ClothingServiceImpl implements ClothingService{
     @Autowired
     private ClothingRepository clothingRepository;
 
+    @Autowired
+    private ImageService imageService;
+
     @Override
     public List<Clothing> getAllClothing() {
         return clothingRepository.findAll();
@@ -91,6 +94,16 @@ public class ClothingServiceImpl implements ClothingService{
         if (!clothingRepository.existsById(id)){throw new ClothingNotFound();}
         Clothing clothing = clothingRepository.findById(id).get();
         clothing.setInvoice(image);
+        clothingRepository.save(clothing);
+    }
+
+    @Override
+    public void deleteInvoice(String id) {
+        if (!clothingRepository.existsById(id)){throw new ClothingNotFound();}
+        Clothing clothing = clothingRepository.findById(id).get();
+        String imageId = clothing.getInvoice().getId();
+        clothing.setInvoice(null);
+        imageService.deleteImage(imageId);
         clothingRepository.save(clothing);
     }
 }

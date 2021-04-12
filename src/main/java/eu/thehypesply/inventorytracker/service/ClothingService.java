@@ -18,4 +18,5 @@ public interface ClothingService {
     long getTotalSold();
     long getBalance();
     void uploadInvoice(String id, Image image);
+    void deleteInvoice(String id);
 }

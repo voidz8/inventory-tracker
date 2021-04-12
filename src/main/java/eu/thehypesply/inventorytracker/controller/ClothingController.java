@@ -79,4 +79,10 @@ public class ClothingController {
         clothingService.uploadInvoice(id, image);
         return new ResponseEntity<>("Successfully uploaded invoice.", HttpStatus.OK);
     }
+
+    @DeleteMapping(value = "/{id}/invoice")
+    public ResponseEntity<Object> deleteInvoice(@PathVariable(value = "id") String id){
+        clothingService.deleteInvoice(id);
+        return new ResponseEntity<>("Successfully deleted invoice.", HttpStatus.NO_CONTENT);
+    }
 }
