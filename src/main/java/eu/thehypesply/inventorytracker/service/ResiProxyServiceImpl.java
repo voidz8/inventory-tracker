@@ -18,6 +18,9 @@ public class ResiProxyServiceImpl implements ResiProxyService{
     @Autowired
     private ResiProxyRepository resiProxyRepository;
 
+    @Autowired
+    private ImageService imageService;
+
     @Override
     public List<ResiProxy> getAllProxies() {
         return resiProxyRepository.findAll();
@@ -88,4 +91,16 @@ public class ResiProxyServiceImpl implements ResiProxyService{
         resiProxy.setInvoice(image);
         resiProxyRepository.save(resiProxy);
     }
+
+    @Override
+    public void deleteInvoice(String id) {
+        if (!resiProxyRepository.existsById(id)){throw new ProxyNotFound();}
+        ResiProxy resiProxy = resiProxyRepository.findById(id).get();
+        String imageId = resiProxy.getInvoice().getId();
+        resiProxy.setInvoice(null);
+        imageService.deleteImage(imageId);
+        resiProxyRepository.save(resiProxy);
+    }
+
+
 }

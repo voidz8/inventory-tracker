@@ -74,4 +74,10 @@ public class ResiProxyController {
         resiProxyService.uploadInvoice(id, image);
         return new ResponseEntity<>("Successfully uploade invoice", HttpStatus.OK);
     }
+
+    @DeleteMapping(value = "/{id}/invoice")
+    public ResponseEntity<Object> deleteInvoice(@PathVariable(value = "id") String id){
+        resiProxyService.deleteInvoice(id);
+        return new ResponseEntity<>("Successfully deleted invoice.", HttpStatus.NO_CONTENT);
+    }
 }

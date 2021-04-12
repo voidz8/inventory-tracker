@@ -17,4 +17,5 @@ public interface ResiProxyService {
     void deleteProxy(String id);
     long spendOnProxies();
     void uploadInvoice(String id, Image image);
+    void deleteInvoice(String id);
 }
