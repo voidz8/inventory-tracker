@@ -14,6 +14,7 @@ public interface SneakerService {
     List<Sneaker> getAllSneakers();
     Optional<Sneaker> getSneaker(String id);
     String createSneaker(Sneaker sneaker) throws InterruptedException, IOException;
+    String createSneakerManual(Sneaker sneaker);
     void deleteSneaker(String id);
     void updateSneaker(String id, Map<String, Object> fields);
     long getTotalBought();

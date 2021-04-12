@@ -43,7 +43,13 @@ public class SneakerController {
     @PostMapping(value = "")
     public ResponseEntity<Object> createSneaker(@RequestBody Sneaker sneaker) throws IOException, InterruptedException {
     String newSneaker = sneakerService.createSneaker(sneaker);
-    return new ResponseEntity<>("Succesfully created: " + newSneaker, HttpStatus.CREATED);
+    return new ResponseEntity<>("Successfully created: " + newSneaker, HttpStatus.CREATED);
+    }
+
+    @PostMapping(value = "/manual")
+    public ResponseEntity<Object> createSneakerManual(@RequestBody Sneaker sneaker){
+        String newSneaker = sneakerService.createSneakerManual(sneaker);
+        return new ResponseEntity<>("Successfully created: " + newSneaker, HttpStatus.OK);
     }
 
     @DeleteMapping(value = "/{id}")

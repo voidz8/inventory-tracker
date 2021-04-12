@@ -107,6 +107,12 @@ public class SneakerServiceImpl implements SneakerService{
 
     }
 
+    @Override
+    public String createSneakerManual(Sneaker sneaker) {
+        sneakerRepository.save(sneaker);
+        return sneaker.getSneakerName();
+    }
+
     public void deleteSneaker(String id) {
         if (!sneakerRepository.existsById(id)) {throw new SneakerNotFound();}
         sneakerRepository.deleteById(id);
