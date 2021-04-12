@@ -16,4 +16,5 @@ public interface DCProxyService {
     void deleteDCProxy(String id);
     long spendOnDcProxies();
     void uploadInvoice(String id, Image image);
+    void deleteInvoice(String id);
 }

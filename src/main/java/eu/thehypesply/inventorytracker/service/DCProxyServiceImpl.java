@@ -18,6 +18,9 @@ public class DCProxyServiceImpl implements DCProxyService {
     @Autowired
     private DCProxyRepository dcProxyRepository;
 
+    @Autowired
+    private ImageService imageService;
+
     @Override
     public List<DCProxy> getAllDCProxies() {
         return dcProxyRepository.findAll();
@@ -86,6 +89,16 @@ public class DCProxyServiceImpl implements DCProxyService {
         if (!dcProxyRepository.existsById(id)){throw new ProxyNotFound();}
         DCProxy dcProxy = dcProxyRepository.findById(id).get();
         dcProxy.setInvoice(image);
+        dcProxyRepository.save(dcProxy);
+    }
+
+    @Override
+    public void deleteInvoice(String id) {
+        if (!dcProxyRepository.existsById(id)){throw new ProxyNotFound();}
+        DCProxy dcProxy = dcProxyRepository.findById(id).get();
+        String imageId = dcProxy.getInvoice().getId();
+        dcProxy.setInvoice(null);
+        imageService.deleteImage(imageId);
         dcProxyRepository.save(dcProxy);
     }
 }
