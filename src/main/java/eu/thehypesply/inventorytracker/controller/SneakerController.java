@@ -49,7 +49,7 @@ public class SneakerController {
     @PostMapping(value = "/manual")
     public ResponseEntity<Object> createSneakerManual(@RequestBody Sneaker sneaker){
         String newSneaker = sneakerService.createSneakerManual(sneaker);
-        return new ResponseEntity<>("Successfully created: " + newSneaker, HttpStatus.OK);
+        return new ResponseEntity<>("Successfully created: " + newSneaker, HttpStatus.CREATED);
     }
 
     @DeleteMapping(value = "/{id}")
@@ -79,13 +79,17 @@ public class SneakerController {
        return new ResponseEntity<>("Your balance is $" + sneakerService.getBalance(), HttpStatus.OK);
     }
 
-
-
     @PostMapping(value = "/{id}/invoice")
     public ResponseEntity<Object> addInvoice(@PathVariable(value = "id")String id, @RequestParam("file") MultipartFile file){
         Image image = imageService.storeImage(file);
         sneakerService.uploadInvoice(id, image);
         return new ResponseEntity<>("Successfully uploaded invoice.", HttpStatus.OK);
+    }
+
+    @DeleteMapping(value = "/{id}/invoice")
+    public ResponseEntity<Object> deleteInvoice(@PathVariable(value = "id") String id){
+        sneakerService.deleteInvoice(id);
+        return new ResponseEntity<>("Successfully deleted invoice.", HttpStatus.NO_CONTENT);
     }
 
 }

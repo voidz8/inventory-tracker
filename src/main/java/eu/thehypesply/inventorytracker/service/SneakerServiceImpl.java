@@ -172,4 +172,12 @@ public class SneakerServiceImpl implements SneakerService{
         sneaker.setInvoice(image);
         sneakerRepository.save(sneaker);
     }
+
+    @Override
+    public void deleteInvoice(String id) {
+        if (!sneakerRepository.existsById(id)){throw new SneakerNotFound();}
+        Sneaker sneaker = sneakerRepository.findById(id).get();
+        sneaker.setInvoice(null);
+        sneakerRepository.save(sneaker);
+    }
 }
