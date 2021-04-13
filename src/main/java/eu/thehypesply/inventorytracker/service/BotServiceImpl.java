@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 @Service
 public class BotServiceImpl implements BotService{
@@ -21,9 +22,9 @@ public class BotServiceImpl implements BotService{
     }
 
     @Override
-    public List<Bot> getBots(String botName) {
-        if (!botRepository.existsById(botName)){throw new BotNotFound();}
-        return botRepository.findAllByBotName(botName);
+    public Optional<Bot> getBot(String id) {
+        if (!botRepository.existsById(id)){throw new BotNotFound();}
+        return botRepository.findById(id);
     }
 
     @Override
@@ -44,14 +45,14 @@ public class BotServiceImpl implements BotService{
     Bot bot = botRepository.findById(id).get();
     for (String field : fields.keySet()){
         switch (field){
+            case "botName":
+                bot.setBotName((String) fields.get(field));
+                break;
             case "priceBought":
-                bot.setPriceBought((long) fields.get(field));
+                bot.setPriceBought((Integer) fields.get(field));
                 break;
             case "priceSold":
-                bot.setPriceSold((long) fields.get(field));
-                break;
-            case "value":
-                bot.setRentalIncome((long) fields.get(field));
+                bot.setPriceSold((Integer) fields.get(field));
                 break;
         }
     }

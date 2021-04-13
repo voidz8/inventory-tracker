@@ -1,8 +1,6 @@
 package eu.thehypesply.inventorytracker.model;
 
 import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -30,6 +28,4 @@ public class Bot {
     @DBRef(lazy = true)
     private BotRental botRental;
 
-    public Bot() {
-    }
 }

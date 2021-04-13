@@ -28,9 +28,9 @@ public class BotController {
         return new ResponseEntity<>(botService.getAllBots(), HttpStatus.OK);
     }
 
-    @GetMapping(value = "/{botName}")
-    public ResponseEntity<Object> getBots(@PathVariable(value = "botName") String botName){
-        return new ResponseEntity<>(botService.getBots(botName), HttpStatus.OK);
+    @GetMapping(value = "/{id}")
+    public ResponseEntity<Object> getBot(@PathVariable(value = "id") String id){
+        return new ResponseEntity<>(botService.getBot(id), HttpStatus.OK);
     }
 
     @PostMapping(value = "")
