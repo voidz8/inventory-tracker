@@ -52,10 +52,10 @@ public class ClothingServiceImpl implements ClothingService{
                     item.setName((String) fields.get(field));
                     break;
                 case "priceBought":
-                    item.setPriceBought((Long) fields.get(field));
+                    item.setPriceBought((Integer) fields.get(field));
                     break;
                 case "priceSold":
-                    item.setPriceSold((Long) fields.get(field));
+                    item.setPriceSold((Integer) fields.get(field));
                     break;
             }
         }
