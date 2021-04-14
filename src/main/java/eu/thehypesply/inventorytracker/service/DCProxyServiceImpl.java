@@ -7,7 +7,10 @@ import eu.thehypesply.inventorytracker.repository.DCProxyRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -45,7 +48,7 @@ public class DCProxyServiceImpl implements DCProxyService {
     }
 
     @Override
-    public void updateDCProxy(String id, Map<String, Object> fields) {
+    public void updateDCProxy(String id, Map<String, Object> fields) throws ParseException {
     if (!dcProxyRepository.existsById(id)){throw new ProxyNotFound();}
     DCProxy proxy = dcProxyRepository.findById(id).get();
     for (String field : fields.keySet()){
@@ -60,8 +63,9 @@ public class DCProxyServiceImpl implements DCProxyService {
                 proxy.setPrice((Long) fields.get(field));
                 break;
             case "expiryDate":
-                LocalDate newDate = LocalDate.parse(fields.get(field).toString());
-                proxy.setExpiryDate(newDate);
+                Date newExpiryDate = new SimpleDateFormat("dd-MM-yyy").parse(fields.get(field).toString());
+                newExpiryDate.setTime(newExpiryDate.getTime()+3600000);
+                proxy.setExpiryDate(newExpiryDate);
                 break;
         }
     }

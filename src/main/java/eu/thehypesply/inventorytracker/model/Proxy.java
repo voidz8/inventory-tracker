@@ -1,9 +1,10 @@
 package eu.thehypesply.inventorytracker.model;
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import lombok.Data;
 
-import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Field;
-import java.time.LocalDate;
+import java.util.Date;
 
 @Data
 public abstract class Proxy {
@@ -14,8 +15,10 @@ public abstract class Proxy {
     @Field
     private long price;
 
+    @JsonDeserialize
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
     @Field
-    private LocalDate expiryDate;
+    private Date expiryDate;
 
     @Field
     private Image invoice;

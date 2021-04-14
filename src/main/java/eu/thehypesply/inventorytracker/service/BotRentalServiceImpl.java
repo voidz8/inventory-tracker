@@ -66,7 +66,7 @@ public class BotRentalServiceImpl implements BotRentalService{
             case "rentalExpiry":
                 Date newExpiryDate = new SimpleDateFormat("dd-MM-yyy").parse(fields.get(field).toString());
                 newExpiryDate.setTime(newExpiryDate.getTime()+3600000);
-                rental.setRentalDate(newExpiryDate);
+                rental.setRentalExpiry(newExpiryDate);
                 break;
             case "price":
                 rental.setPrice((Integer) fields.get(field));

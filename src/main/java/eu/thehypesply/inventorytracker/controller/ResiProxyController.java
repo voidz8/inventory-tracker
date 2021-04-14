@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.text.ParseException;
 import java.util.Map;
 
 @RestController
@@ -52,7 +53,7 @@ public class ResiProxyController {
     }
 
     @PatchMapping(value = "/{id}")
-    public ResponseEntity<Object> updateProxy(@PathVariable(value = "id") String id, @RequestBody Map<String, Object> fields){
+    public ResponseEntity<Object> updateProxy(@PathVariable(value = "id") String id, @RequestBody Map<String, Object> fields) throws ParseException {
         resiProxyService.updateProxy(id, fields);
         return new ResponseEntity<>("Successfully updated.", HttpStatus.OK);
     }

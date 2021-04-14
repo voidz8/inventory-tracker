@@ -7,7 +7,10 @@ import eu.thehypesply.inventorytracker.repository.ResiProxyRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -45,7 +48,7 @@ public class ResiProxyServiceImpl implements ResiProxyService{
     }
 
     @Override
-    public void updateProxy(String id, Map<String, Object> fields) {
+    public void updateProxy(String id, Map<String, Object> fields) throws ParseException {
     if (!resiProxyRepository.existsById(id)){throw new ProxyNotFound();}
     ResiProxy proxy = resiProxyRepository.findById(id).get();
     for (String field : fields.keySet()){
@@ -60,8 +63,9 @@ public class ResiProxyServiceImpl implements ResiProxyService{
                 proxy.setPrice((Long) fields.get(field));
                 break;
             case "expiryDate":
-                LocalDate newDate = LocalDate.parse(fields.get(field).toString());
-                proxy.setExpiryDate(newDate);
+                Date newExpiryDate = new SimpleDateFormat("dd-MM-yyy").parse(fields.get(field).toString());
+                newExpiryDate.setTime(newExpiryDate.getTime()+3600000);
+                proxy.setExpiryDate(newExpiryDate);
                 break;
         }
     }
