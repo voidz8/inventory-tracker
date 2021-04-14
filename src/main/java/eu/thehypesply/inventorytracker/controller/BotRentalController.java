@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.text.ParseException;
 import java.util.Map;
 
 @RestController
@@ -45,7 +46,7 @@ public class BotRentalController {
     }
 
     @PatchMapping(value = "/{id}")
-    public ResponseEntity<Object> updateBotRental(@PathVariable(value = "id") String id, @RequestBody Map<String, Object> fields){
+    public ResponseEntity<Object> updateBotRental(@PathVariable(value = "id") String id, @RequestBody Map<String, Object> fields) throws ParseException {
         botRentalService.updateBotRental(id, fields);
         return new ResponseEntity<>("Successfully updated botrental.", HttpStatus.OK);
     }

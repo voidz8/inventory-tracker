@@ -8,7 +8,10 @@ import eu.thehypesply.inventorytracker.repository.TotalRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -50,21 +53,23 @@ public class BotRentalServiceImpl implements BotRentalService{
     }
 
     @Override
-    public void updateBotRental(String id, Map<String, Object> fields) {
+    public void updateBotRental(String id, Map<String, Object> fields) throws ParseException {
     if (!botRentalRepository.existsById(id)){throw new BotRentalNotFound();}
     BotRental rental = botRentalRepository.findById(id).get();
     for (String field : fields.keySet()){
         switch (field){
             case "rentalDate":
-                LocalDate newRentalDate = LocalDate.parse(fields.get(field).toString());
+                Date newRentalDate = new SimpleDateFormat("dd-MM-yyy").parse(fields.get(field).toString());
+                newRentalDate.setTime(newRentalDate.getTime()+3600000);
                 rental.setRentalDate(newRentalDate);
                 break;
             case "rentalExpiry":
-                LocalDate newExpiryDate = LocalDate.parse(fields.get(field).toString());
-                rental.setRentalExpiry(newExpiryDate);
+                Date newExpiryDate = new SimpleDateFormat("dd-MM-yyy").parse(fields.get(field).toString());
+                newExpiryDate.setTime(newExpiryDate.getTime()+3600000);
+                rental.setRentalDate(newExpiryDate);
                 break;
             case "price":
-                rental.setPrice((Long) fields.get(field));
+                rental.setPrice((Integer) fields.get(field));
                 break;
             case "bot":
                 rental.setBot((Bot) fields.get(field));

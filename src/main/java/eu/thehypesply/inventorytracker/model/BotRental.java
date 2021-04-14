@@ -8,7 +8,7 @@ import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 
-import java.time.LocalDate;
+import java.util.Date;
 
 @Data
 @Document
@@ -20,12 +20,12 @@ public class BotRental {
     @JsonDeserialize
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
     @Field
-    private LocalDate rentalDate;
+    private Date rentalDate;
 
     @JsonDeserialize
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
     @Field
-    private LocalDate rentalExpiry;
+    private Date rentalExpiry;
 
     @Field
     private long price;
