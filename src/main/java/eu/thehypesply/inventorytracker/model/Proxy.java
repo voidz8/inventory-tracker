@@ -4,6 +4,8 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import lombok.Data;
 
 import org.springframework.data.mongodb.core.mapping.Field;
+
+import java.time.LocalDate;
 import java.util.Date;
 
 @Data
@@ -14,6 +16,9 @@ public abstract class Proxy {
 
     @Field
     private long price;
+
+    @Field
+    private LocalDate dateBought;
 
     @JsonDeserialize
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")

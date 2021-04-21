@@ -41,12 +41,7 @@ public class ResiProxyController {
         return new ResponseEntity<>(resiProxyService.getProxy(id), HttpStatus.OK);
     }
 
-    @GetMapping(value = "/{proxyCompany}")
-    public ResponseEntity<Object> getProxiesByCompany(@PathVariable(value = "proxyCompany") String proxyCompany){
-        return new ResponseEntity<>(resiProxyService.getProxiesByCompany(proxyCompany), HttpStatus.OK);
-    }
-
-    @PostMapping(value = "/{id}")
+    @PostMapping(value = "")
     public ResponseEntity<Object> createProxy(@RequestBody ResiProxy resiProxy){
         String newProxy = resiProxyService.createProxy(resiProxy);
         return new ResponseEntity<>("Successfully added new proxy " + newProxy, HttpStatus.CREATED);
@@ -73,7 +68,7 @@ public class ResiProxyController {
     public ResponseEntity<Object> addInvoice(@PathVariable(value = "id") String id, @RequestParam("file")MultipartFile file){
         Image image = imageService.storeImage(file);
         resiProxyService.uploadInvoice(id, image);
-        return new ResponseEntity<>("Successfully uploade invoice", HttpStatus.OK);
+        return new ResponseEntity<>("Successfully uploaded invoice", HttpStatus.OK);
     }
 
     @DeleteMapping(value = "/{id}/invoice")

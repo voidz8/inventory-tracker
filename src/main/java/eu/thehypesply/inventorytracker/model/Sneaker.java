@@ -6,6 +6,8 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 
+import java.time.LocalDate;
+
 @Document(collection = "Sneakers")
 @Data
 public class Sneaker {
@@ -20,13 +22,13 @@ public class Sneaker {
     private String sneakerName;
 
     @Field
-    private Long size;
+    private long size;
 
     @Field
-    private Long priceBought;
+    private long priceBought;
 
     @Field
-    private Long salePrice;
+    private long salePrice;
 
     @Field
     private byte[] photo;
@@ -34,7 +36,10 @@ public class Sneaker {
     @Field
     private Image invoice;
 
+    @Field
+    private LocalDate dateBought;
 
-    public Sneaker() {
-    }
+    @Field
+    private LocalDate dateSold;
+
 }

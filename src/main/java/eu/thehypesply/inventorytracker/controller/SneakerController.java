@@ -61,7 +61,7 @@ public class SneakerController {
     @PatchMapping(value = "/{id}")
     public ResponseEntity<Object> updateSneaker(@PathVariable(value = "id")String id, @RequestBody Map<String, Object> fields){
         sneakerService.updateSneaker(id,fields);
-        return new ResponseEntity<>("Succesfully updated sneaker with pid: " + id+ ".", HttpStatus.OK);
+        return new ResponseEntity<>("Succesfully updated: " + sneakerService.getSneaker(id).get().getSneakerName() + ".", HttpStatus.OK);
     }
 
     @GetMapping(value = "/invested")

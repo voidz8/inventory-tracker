@@ -5,6 +5,7 @@ import eu.thehypesply.inventorytracker.model.Image;
 import eu.thehypesply.inventorytracker.model.ResiProxy;
 import eu.thehypesply.inventorytracker.repository.ResiProxyRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.mongodb.core.aggregation.ArrayOperators;
 import org.springframework.stereotype.Service;
 
 import java.text.ParseException;
@@ -36,12 +37,6 @@ public class ResiProxyServiceImpl implements ResiProxyService{
     }
 
     @Override
-    public List<ResiProxy> getProxiesByCompany(String proxyCompany) {
-        if (!resiProxyRepository.existsByProxyCompany(proxyCompany)){throw new ProxyNotFound("No proxies found for this provider");}
-        return resiProxyRepository.findByProxyCompany(proxyCompany);
-    }
-
-    @Override
     public String createProxy(ResiProxy resiProxy) {
         ResiProxy newProxy = resiProxyRepository.save(resiProxy);
         return newProxy.getProxyCompany();
@@ -54,13 +49,13 @@ public class ResiProxyServiceImpl implements ResiProxyService{
     for (String field : fields.keySet()){
         switch (field){
             case "amount":
-                proxy.setAmount((String) fields.get(field));
+                proxy.setAmount((Integer) fields.get(field));
                 break;
             case "proxyCompany":
                 proxy.setProxyCompany((String) fields.get(field));
                 break;
             case "price":
-                proxy.setPrice((Long) fields.get(field));
+                proxy.setPrice((Integer) fields.get(field));
                 break;
             case "expiryDate":
                 Date newExpiryDate = new SimpleDateFormat("dd-MM-yyy").parse(fields.get(field).toString());

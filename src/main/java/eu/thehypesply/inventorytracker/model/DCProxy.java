@@ -19,5 +19,5 @@ public class DCProxy extends Proxy {
     private String id;
 
     @Field
-    private Long amount;
+    private long amount;
 }

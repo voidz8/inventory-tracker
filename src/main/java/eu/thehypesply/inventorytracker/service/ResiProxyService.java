@@ -12,7 +12,6 @@ public interface ResiProxyService {
 
     List<ResiProxy> getAllProxies();
     Optional<ResiProxy> getProxy(String id);
-    List<ResiProxy> getProxiesByCompany(String proxyCompany);
     String createProxy(ResiProxy resiProxy);
     void updateProxy(String id, Map<String, Object> fields) throws ParseException;
     void deleteProxy(String id);

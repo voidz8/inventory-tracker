@@ -11,7 +11,6 @@ import java.util.Optional;
 public interface DCProxyService {
     List<DCProxy> getAllDCProxies();
     Optional<DCProxy> getDCProxy(String id);
-    List<DCProxy> getDcProxyByCompany(String proxyCompany);
     String createDCProxy(DCProxy dcProxy);
     void updateDCProxy(String id, Map<String, Object> fields) throws ParseException;
     void deleteDCProxy(String id);

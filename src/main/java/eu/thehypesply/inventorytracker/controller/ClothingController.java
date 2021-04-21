@@ -1,6 +1,6 @@
 package eu.thehypesply.inventorytracker.controller;
 
-import eu.thehypesply.inventorytracker.model.Clothing;
+import eu.thehypesply.inventorytracker.model.Item;
 import eu.thehypesply.inventorytracker.model.Image;
 import eu.thehypesply.inventorytracker.service.ClothingService;
 import eu.thehypesply.inventorytracker.service.ImageService;
@@ -41,8 +41,8 @@ public class ClothingController {
     }
 
     @PostMapping(value = "")
-    public ResponseEntity<Object> createClothing(@RequestBody Clothing clothing){
-        String newCloting = clothingService.createClothing(clothing);
+    public ResponseEntity<Object> createClothing(@RequestBody Item item){
+        String newCloting = clothingService.createClothing(item);
         return new ResponseEntity<>("Successfully created " + newCloting , HttpStatus.CREATED);
     }
 

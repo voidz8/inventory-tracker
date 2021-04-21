@@ -42,11 +42,6 @@ public class DCProxyController {
         return new ResponseEntity<>(dcProxyService.getDCProxy(id), HttpStatus.OK);
     }
 
-    @GetMapping(value = "/{proxyCompany}")
-    public ResponseEntity<Object> getProxyByCompanyName(@PathVariable(value = "proxyCompany") String proxycompany){
-        return new ResponseEntity<>(dcProxyService.getDcProxyByCompany(proxycompany), HttpStatus.OK);
-    }
-
     @PostMapping(value = "")
     public ResponseEntity<Object> createProxy(@RequestBody DCProxy dcProxy){
         String newProxy = dcProxyService.createDCProxy(dcProxy);

@@ -1,7 +1,7 @@
 package eu.thehypesply.inventorytracker.service;
 
 import eu.thehypesply.inventorytracker.exception.ClothingNotFound;
-import eu.thehypesply.inventorytracker.model.Clothing;
+import eu.thehypesply.inventorytracker.model.Item;
 import eu.thehypesply.inventorytracker.model.Image;
 import eu.thehypesply.inventorytracker.repository.ClothingRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,19 +21,19 @@ public class ClothingServiceImpl implements ClothingService{
     private ImageService imageService;
 
     @Override
-    public List<Clothing> getAllClothing() {
+    public List<Item> getAllClothing() {
         return clothingRepository.findAll();
     }
 
     @Override
-    public Optional<Clothing> getClothing(String id) {
+    public Optional<Item> getClothing(String id) {
         if (!clothingRepository.existsById(id)){throw new ClothingNotFound();}
         return clothingRepository.findById(id);
     }
 
     @Override
-    public String createClothing(Clothing clothing) {
-        Clothing newItem = clothingRepository.save(clothing);
+    public String createClothing(Item item) {
+        Item newItem = clothingRepository.save(item);
         return newItem.getName();
     }
 
@@ -45,7 +45,7 @@ public class ClothingServiceImpl implements ClothingService{
     @Override
     public void updateClothing(String id, Map<String, Object> fields) {
         if (!clothingRepository.existsById(id)){throw new ClothingNotFound();}
-        Clothing item = clothingRepository.findById(id).get();
+        Item item = clothingRepository.findById(id).get();
         for (String field : fields.keySet()){
             switch (field){
                 case "name":
@@ -64,10 +64,10 @@ public class ClothingServiceImpl implements ClothingService{
 
     @Override
     public long getTotalBought() {
-        List<Clothing> allClothing = clothingRepository.findAll();
+        List<Item> allItem = clothingRepository.findAll();
         long total = 0;
-        for (Clothing clothing : allClothing){
-            long value = clothing.getPriceBought();
+        for (Item item : allItem){
+            long value = item.getPriceBought();
             total = total + value;
         }
         return total;
@@ -75,10 +75,10 @@ public class ClothingServiceImpl implements ClothingService{
 
     @Override
     public long getTotalSold() {
-        List<Clothing> allClothing = clothingRepository.findAll();
+        List<Item> allItem = clothingRepository.findAll();
         long total = 0;
-        for (Clothing clothing : allClothing){
-            long value = clothing.getPriceSold();
+        for (Item item : allItem){
+            long value = item.getPriceSold();
             total = total + value;
         }
         return total;
@@ -92,18 +92,18 @@ public class ClothingServiceImpl implements ClothingService{
     @Override
     public void uploadInvoice(String id, Image image) {
         if (!clothingRepository.existsById(id)){throw new ClothingNotFound();}
-        Clothing clothing = clothingRepository.findById(id).get();
-        clothing.setInvoice(image);
-        clothingRepository.save(clothing);
+        Item item = clothingRepository.findById(id).get();
+        item.setInvoice(image);
+        clothingRepository.save(item);
     }
 
     @Override
     public void deleteInvoice(String id) {
         if (!clothingRepository.existsById(id)){throw new ClothingNotFound();}
-        Clothing clothing = clothingRepository.findById(id).get();
-        String imageId = clothing.getInvoice().getId();
-        clothing.setInvoice(null);
+        Item item = clothingRepository.findById(id).get();
+        String imageId = item.getInvoice().getId();
+        item.setInvoice(null);
         imageService.deleteImage(imageId);
-        clothingRepository.save(clothing);
+        clothingRepository.save(item);
     }
 }

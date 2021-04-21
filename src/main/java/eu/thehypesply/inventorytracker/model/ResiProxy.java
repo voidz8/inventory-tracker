@@ -19,7 +19,7 @@ public class ResiProxy extends Proxy {
     private String id;
 
     @Field
-    private String amount;
+    private long amount;
 
     public ResiProxy() {
     }

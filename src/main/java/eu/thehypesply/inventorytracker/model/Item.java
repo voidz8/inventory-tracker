@@ -7,9 +7,11 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 
+import java.time.LocalDate;
+
 @Data
 @Document
-public class Clothing {
+public class Item {
 
     @Id
     private String id;
@@ -24,8 +26,14 @@ public class Clothing {
     private long priceSold;
 
     @Field
+    private LocalDate dateBought;
+
+    @Field
+    private LocalDate dateSold;
+
+    @Field
     private Image invoice;
 
-    public Clothing() {
+    public Item() {
     }
 }

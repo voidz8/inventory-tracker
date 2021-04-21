@@ -124,14 +124,17 @@ public class SneakerServiceImpl implements SneakerService{
         Sneaker sneaker = sneakerRepository.findById(id).get();
         for (String field : fields.keySet()){
             switch (field){
+                case "sneakerName":
+                    sneaker.setSneakerName((String) fields.get(field));
+                    break;
                 case "size":
-                    sneaker.setSize((long) fields.get(field));
+                    sneaker.setSize((Integer) fields.get(field));
                     break;
                 case "priceBought":
-                    sneaker.setPriceBought((long) fields.get(field));
+                    sneaker.setPriceBought((Integer) fields.get(field));
                     break;
                 case "salePrice":
-                    sneaker.setSalePrice((long) fields.get(field));
+                    sneaker.setSalePrice((Integer) fields.get(field));
                     break;
             }
         }
