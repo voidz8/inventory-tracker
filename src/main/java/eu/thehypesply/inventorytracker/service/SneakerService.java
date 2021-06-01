@@ -22,5 +22,6 @@ public interface SneakerService {
     long getBalance();
     void uploadInvoice(String id, Image image);
     void deleteInvoice(String id);
+    void sold(String id, long priceSold);
 
 }

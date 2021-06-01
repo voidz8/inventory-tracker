@@ -22,6 +22,8 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
+import java.time.LocalDate;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -183,6 +185,14 @@ public class SneakerServiceImpl implements SneakerService{
         String imageId = sneaker.getInvoice().getId();
         sneaker.setInvoice(null);
         imageService.deleteImage(imageId);
+        sneakerRepository.save(sneaker);
+    }
+
+    @Override
+    public void sold(String id, long priceSold) {
+        Sneaker sneaker = sneakerRepository.findById(id).get();
+        sneaker.setDateSold(LocalDate.now());
+        sneaker.setSalePrice(priceSold);
         sneakerRepository.save(sneaker);
     }
 }

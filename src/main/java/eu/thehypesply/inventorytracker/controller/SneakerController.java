@@ -69,7 +69,7 @@ public class SneakerController {
         return new ResponseEntity<>("You have $"+ sneakerService.getTotalBought() + " invested in sneakers.", HttpStatus.OK);
     }
 
-    @GetMapping(value = "/sold")
+    @GetMapping(value = "/sales")
     public ResponseEntity<Object> getTotalSold(){
         return new ResponseEntity<>("Your total in sales is $" + sneakerService.getTotalSold(), HttpStatus.OK);
     }
