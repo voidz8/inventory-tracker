@@ -28,12 +28,6 @@ public interface SneakerService {
 
     long getBalance();
 
-    void uploadInvoice(long id, Image image);
-
-    void deleteInvoice(long id);
-
-    //    void uploadPicture(String id, Image image);
-//    void deletePicture(String id);
     void sold(long id, int priceSold);
 
     List<DataDto> getSneakerData(Authentication auth);

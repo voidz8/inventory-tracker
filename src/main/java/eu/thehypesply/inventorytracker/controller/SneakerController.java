@@ -54,8 +54,8 @@ public class SneakerController {
         return new ResponseEntity<>(sneakerService.getSneaker(id), HttpStatus.OK);
     }
 
-    @PostMapping(value = "", consumes = {"multipartfile/form-data"})
-    public ResponseEntity<Object> createSneakerManual(@RequestBody Sneaker sneaker, Authentication authentication, @ModelAttribute MultipartFile photo, @ModelAttribute MultipartFile invoice) {
+    @PostMapping(value = "", consumes = {"multipart/form-data"})
+    public ResponseEntity<Object> createSneakerManual(@ModelAttribute Sneaker sneaker, Authentication authentication, @ModelAttribute MultipartFile photo, @ModelAttribute MultipartFile invoice) {
         Image uploadedPhoto = imageService.storeImage(photo);
         Image uploadedInvoice = imageService.storeImage(invoice);
         String newSneaker = sneakerService.createSneakerManual(sneaker, authentication, uploadedPhoto, uploadedInvoice);
@@ -87,19 +87,6 @@ public class SneakerController {
     @GetMapping(value = "/balance")
     public ResponseEntity<Object> getBalance() {
         return new ResponseEntity<>("Your balance is $" + sneakerService.getBalance(), HttpStatus.OK);
-    }
-
-    @PostMapping(value = "/{id}/invoice")
-    public ResponseEntity<Object> addInvoice(@PathVariable(value = "id") long id, @RequestParam("file") MultipartFile file) {
-        Image image = imageService.storeImage(file);
-        sneakerService.uploadInvoice(id, image);
-        return new ResponseEntity<>("Successfully uploaded invoice.", HttpStatus.OK);
-    }
-
-    @DeleteMapping(value = "/{id}/invoice")
-    public ResponseEntity<Object> deleteInvoice(@PathVariable(value = "id") long id) {
-        sneakerService.deleteInvoice(id);
-        return new ResponseEntity<>("Successfully deleted invoice.", HttpStatus.NO_CONTENT);
     }
 
     @GetMapping(value = "data")

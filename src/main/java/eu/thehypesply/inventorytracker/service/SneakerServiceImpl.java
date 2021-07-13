@@ -115,6 +115,8 @@ public class SneakerServiceImpl implements SneakerService {
         UserDetailsImpl userDetails = (UserDetailsImpl) auth.getPrincipal();
         User user = userRepository.findByUsername(userDetails.getUsername()).orElseThrow(() -> new UserNotFoundException("User not found")
         );
+        sneaker.setDateBought(LocalDate.now());
+        sneaker.setUser(user);
         sneakerRepository.save(sneaker);
         return sneaker.getSneakerName();
     }
@@ -178,27 +180,7 @@ public class SneakerServiceImpl implements SneakerService {
         return getTotalSold() - getTotalBought();
     }
 
-    @Override
-    public void uploadInvoice(long id, Image image) {
-        if (!sneakerRepository.existsById(id)) {
-            throw new SneakerNotFound();
-        }
-        Sneaker sneaker = sneakerRepository.findById(id).get();
-        sneaker.setInvoice(image);
-        sneakerRepository.save(sneaker);
-    }
 
-    @Override
-    public void deleteInvoice(long id) {
-        if (!sneakerRepository.existsById(id)) {
-            throw new SneakerNotFound();
-        }
-        Sneaker sneaker = sneakerRepository.findById(id).get();
-        String imageId = sneaker.getInvoice().getId();
-        sneaker.setInvoice(null);
-        imageService.deleteImage(imageId);
-        sneakerRepository.save(sneaker);
-    }
 
     @Override
     public void sold(long id, int priceSold) {

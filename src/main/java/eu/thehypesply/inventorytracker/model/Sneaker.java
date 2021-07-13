@@ -1,6 +1,10 @@
 package eu.thehypesply.inventorytracker.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateDeserializer;
 import lombok.Data;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
@@ -26,16 +30,14 @@ public class Sneaker {
     private long sneakerSize;
     private long priceBought;
     private Integer salePrice;
+    
+    private transient MultipartFile photo;
 
-    @OneToOne
-    @JoinColumn(name = "image_id", updatable = false, insertable = false)
-    private Image photo;
+    private transient MultipartFile invoice;
 
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "image_id", updatable = false, insertable = false)
-    private Image invoice;
-
+    @JsonDeserialize(using = LocalDateDeserializer.class)
     private LocalDate dateBought;
+    @JsonDeserialize(using = LocalDateDeserializer.class)
     private LocalDate dateSold;
 
 

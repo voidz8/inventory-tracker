@@ -1,6 +1,7 @@
 package eu.thehypesply.inventorytracker.service;
 
 import eu.thehypesply.inventorytracker.model.Image;
+import eu.thehypesply.inventorytracker.model.Sneaker;
 import org.springframework.web.multipart.MultipartFile;
 
 public interface ImageService {

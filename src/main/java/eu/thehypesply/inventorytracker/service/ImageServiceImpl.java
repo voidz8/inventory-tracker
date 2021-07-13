@@ -2,6 +2,7 @@ package eu.thehypesply.inventorytracker.service;
 
 import eu.thehypesply.inventorytracker.exception.ImageStorageException;
 import eu.thehypesply.inventorytracker.model.Image;
+import eu.thehypesply.inventorytracker.model.Sneaker;
 import eu.thehypesply.inventorytracker.repository.ImageRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -18,7 +19,7 @@ public class ImageServiceImpl implements ImageService{
     private ImageRepository imageRepository;
 
     @Override
-    public Image storeImage(MultipartFile file) {
+    public Image storeImage(MultipartFile file, Sneaker sneaker) {
         String fileName = StringUtils.cleanPath(Objects.requireNonNull(file.getOriginalFilename()));
         try {
             if (fileName.contains("..")) {
@@ -28,6 +29,7 @@ public class ImageServiceImpl implements ImageService{
             image.setFileName(fileName);
             image.setFileType(file.getContentType());
             image.setData(file.getBytes());
+            image.setSneaker(sneaker);
             return imageRepository.save(image);
         } catch (IOException e){
             throw new ImageStorageException("Could not store file " + fileName, e);
