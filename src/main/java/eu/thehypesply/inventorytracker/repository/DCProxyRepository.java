@@ -1,14 +1,9 @@
 package eu.thehypesply.inventorytracker.repository;
 
 import eu.thehypesply.inventorytracker.model.DCProxy;
-import org.springframework.data.mongodb.repository.MongoRepository;
-import org.springframework.stereotype.Repository;
+import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
 
-@Repository
-public interface DCProxyRepository extends MongoRepository<DCProxy, String>{
-
-    boolean existsByProxyCompany(String proxyCompany);
-    List<DCProxy> findByProxyCompany(String proxyCompany);
+public interface DCProxyRepository extends JpaRepository<DCProxy, Long> {
 }

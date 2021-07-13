@@ -11,11 +11,18 @@ import java.util.Optional;
 public interface ResiProxyService {
 
     List<ResiProxy> getAllProxies();
-    Optional<ResiProxy> getProxy(String id);
+
+    Optional<ResiProxy> getProxy(long id);
+
     String createProxy(ResiProxy resiProxy);
-    void updateProxy(String id, Map<String, Object> fields) throws ParseException;
-    void deleteProxy(String id);
+
+    void updateProxy(long id, Map<String, Object> fields) throws ParseException;
+
+    void deleteProxy(long id);
+
     long spendOnProxies();
-    void uploadInvoice(String id, Image image);
-    void deleteInvoice(String id);
+
+    void uploadInvoice(long id, Image image);
+
+    void deleteInvoice(long id);
 }

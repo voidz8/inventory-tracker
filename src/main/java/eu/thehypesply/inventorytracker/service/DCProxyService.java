@@ -10,11 +10,18 @@ import java.util.Optional;
 
 public interface DCProxyService {
     List<DCProxy> getAllDCProxies();
-    Optional<DCProxy> getDCProxy(String id);
+
+    Optional<DCProxy> getDCProxy(long id);
+
     String createDCProxy(DCProxy dcProxy);
-    void updateDCProxy(String id, Map<String, Object> fields) throws ParseException;
-    void deleteDCProxy(String id);
+
+    void updateDCProxy(long id, Map<String, Object> fields) throws ParseException;
+
+    void deleteDCProxy(long id);
+
     long spendOnDcProxies();
-    void uploadInvoice(String id, Image image);
-    void deleteInvoice(String id);
+
+    void uploadInvoice(long id, Image image);
+
+    void deleteInvoice(long id);
 }

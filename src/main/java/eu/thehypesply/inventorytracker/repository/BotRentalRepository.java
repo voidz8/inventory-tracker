@@ -1,7 +1,7 @@
 package eu.thehypesply.inventorytracker.repository;
 
 import eu.thehypesply.inventorytracker.model.BotRental;
-import org.springframework.data.mongodb.repository.MongoRepository;
+import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface BotRentalRepository extends MongoRepository<BotRental, String> {
+public interface BotRentalRepository extends JpaRepository<BotRental, Long> {
 }

@@ -5,6 +5,7 @@ import eu.thehypesply.inventorytracker.service.BotRentalService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -18,6 +19,7 @@ import java.text.ParseException;
 import java.util.Map;
 
 @RestController
+@CrossOrigin(origins = "*")
 @RequestMapping(value = "/botrental")
 public class BotRentalController {
 
@@ -25,34 +27,35 @@ public class BotRentalController {
     private BotRentalService botRentalService;
 
     @GetMapping(value = "/all")
-    public ResponseEntity<Object> getAllBotRentals(){
+    public ResponseEntity<Object> getAllBotRentals() {
         return new ResponseEntity<>(botRentalService.getAllBotRentals(), HttpStatus.OK);
     }
+
     @GetMapping(value = "/{id}")
-    public ResponseEntity<Object> getBotRental(@PathVariable(value = "id")String id){
+    public ResponseEntity<Object> getBotRental(@PathVariable(value = "id") long id) {
         return new ResponseEntity<>(botRentalService.getBotRental(id), HttpStatus.OK);
     }
 
     @PostMapping(value = "")
-    public ResponseEntity<Object> createBotRental(@RequestBody BotRental botRental){
+    public ResponseEntity<Object> createBotRental(@RequestBody BotRental botRental) {
         String newBotRental = botRentalService.createBotRental(botRental);
-        return new ResponseEntity<>("Successfully created a " + newBotRental+" botrental.", HttpStatus.CREATED);
+        return new ResponseEntity<>("Successfully created a " + newBotRental + " botrental.", HttpStatus.CREATED);
     }
 
     @DeleteMapping(value = "/{id}")
-    public ResponseEntity<Object> deleteBotRental(@PathVariable(value = "id") String id){
+    public ResponseEntity<Object> deleteBotRental(@PathVariable(value = "id") long id) {
         botRentalService.deleteBotRental(id);
         return new ResponseEntity<>("Successfully deleted botrental.", HttpStatus.NO_CONTENT);
     }
 
     @PatchMapping(value = "/{id}")
-    public ResponseEntity<Object> updateBotRental(@PathVariable(value = "id") String id, @RequestBody Map<String, Object> fields) throws ParseException {
+    public ResponseEntity<Object> updateBotRental(@PathVariable(value = "id") long id, @RequestBody Map<String, Object> fields) throws ParseException {
         botRentalService.updateBotRental(id, fields);
         return new ResponseEntity<>("Successfully updated botrental.", HttpStatus.OK);
     }
 
     @GetMapping(value = "/income")
-    public ResponseEntity<Object> rentalIncome(){
+    public ResponseEntity<Object> rentalIncome() {
         return new ResponseEntity<>("Your total rentalincome is $" + botRentalService.rentalIncome(), HttpStatus.OK);
     }
 }

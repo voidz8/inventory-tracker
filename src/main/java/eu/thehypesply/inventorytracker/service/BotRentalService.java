@@ -10,9 +10,9 @@ import java.util.Optional;
 public interface BotRentalService {
 
     List<BotRental> getAllBotRentals();
-    Optional<BotRental> getBotRental(String id);
+    Optional<BotRental> getBotRental(long id);
     String createBotRental(BotRental botRental);
-    void deleteBotRental(String id);
-    void updateBotRental(String id, Map<String, Object> fields) throws ParseException;
+    void deleteBotRental(long id);
+    void updateBotRental(long id, Map<String, Object> fields) throws ParseException;
     long rentalIncome();
 }

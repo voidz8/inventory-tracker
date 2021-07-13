@@ -1,44 +1,47 @@
 package eu.thehypesply.inventorytracker.model;
 
 import lombok.Data;
-import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.Document;
-import org.springframework.data.mongodb.core.mapping.Field;
 
+import javax.persistence.CascadeType;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 import java.time.LocalDate;
 
-@Document(collection = "Sneakers")
+@Entity
 @Data
 public class Sneaker {
 
     @Id
-    private String id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private long id;
 
-    @Field
     private String pid;
-
-    @Field
     private String sneakerName;
-
-    @Field
-    private long size;
-
-    @Field
+    private long sneakerSize;
     private long priceBought;
+    private Integer salePrice;
 
-    @Field
-    private long salePrice;
+    @OneToOne
+    @JoinColumn(name = "image_id", updatable = false, insertable = false)
+    private Image photo;
 
-    @Field
-    private byte[] photo;
-
-    @Field
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "image_id", updatable = false, insertable = false)
     private Image invoice;
 
-    @Field
     private LocalDate dateBought;
-
-    @Field
     private LocalDate dateSold;
+
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id")
+    private User user;
+
 
 }

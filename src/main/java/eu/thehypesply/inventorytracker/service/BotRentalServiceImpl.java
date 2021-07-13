@@ -10,14 +10,13 @@ import org.springframework.stereotype.Service;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
 @Service
-public class BotRentalServiceImpl implements BotRentalService{
+public class BotRentalServiceImpl implements BotRentalService {
 
     @Autowired
     private BotRentalRepository botRentalRepository;
@@ -34,8 +33,10 @@ public class BotRentalServiceImpl implements BotRentalService{
     }
 
     @Override
-    public Optional<BotRental> getBotRental(String id) {
-        if (!botRentalRepository.existsById(id)){throw new BotRentalNotFound();}
+    public Optional<BotRental> getBotRental(long id) {
+        if (!botRentalRepository.existsById(id)) {
+            throw new BotRentalNotFound();
+        }
         return botRentalRepository.findById(id);
     }
 
@@ -47,43 +48,45 @@ public class BotRentalServiceImpl implements BotRentalService{
     }
 
     @Override
-    public void deleteBotRental(String id) {
+    public void deleteBotRental(long id) {
 
         botRentalRepository.deleteById(id);
     }
 
     @Override
-    public void updateBotRental(String id, Map<String, Object> fields) throws ParseException {
-    if (!botRentalRepository.existsById(id)){throw new BotRentalNotFound();}
-    BotRental rental = botRentalRepository.findById(id).get();
-    for (String field : fields.keySet()){
-        switch (field){
-            case "rentalDate":
-                Date newRentalDate = new SimpleDateFormat("dd-MM-yyy").parse(fields.get(field).toString());
-                newRentalDate.setTime(newRentalDate.getTime()+3600000);
-                rental.setRentalDate(newRentalDate);
-                break;
-            case "rentalExpiry":
-                Date newExpiryDate = new SimpleDateFormat("dd-MM-yyy").parse(fields.get(field).toString());
-                newExpiryDate.setTime(newExpiryDate.getTime()+3600000);
-                rental.setRentalExpiry(newExpiryDate);
-                break;
-            case "price":
-                rental.setPrice((Integer) fields.get(field));
-                break;
-            case "bot":
-                rental.setBot((Bot) fields.get(field));
-                break;
+    public void updateBotRental(long id, Map<String, Object> fields) throws ParseException {
+        if (!botRentalRepository.existsById(id)) {
+            throw new BotRentalNotFound();
         }
-    }
-    botRentalRepository.save(rental);
+        BotRental rental = botRentalRepository.findById(id).get();
+        for (String field : fields.keySet()) {
+            switch (field) {
+                case "rentalDate":
+                    Date newRentalDate = new SimpleDateFormat("dd-MM-yyy").parse(fields.get(field).toString());
+                    newRentalDate.setTime(newRentalDate.getTime() + 3600000);
+                    rental.setRentalDate(newRentalDate);
+                    break;
+                case "rentalExpiry":
+                    Date newExpiryDate = new SimpleDateFormat("dd-MM-yyy").parse(fields.get(field).toString());
+                    newExpiryDate.setTime(newExpiryDate.getTime() + 3600000);
+                    rental.setRentalExpiry(newExpiryDate);
+                    break;
+                case "price":
+                    rental.setPrice((Integer) fields.get(field));
+                    break;
+                case "bot":
+                    rental.setBot((Bot) fields.get(field));
+                    break;
+            }
+        }
+        botRentalRepository.save(rental);
     }
 
     @Override
     public long rentalIncome() {
         List<BotRental> rentals = botRentalRepository.findAll();
         long total = 0;
-        for (BotRental rental : rentals){
+        for (BotRental rental : rentals) {
             long value = rental.getPrice();
             total = total + value;
         }

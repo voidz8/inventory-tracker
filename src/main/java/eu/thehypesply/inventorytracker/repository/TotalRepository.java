@@ -1,9 +1,7 @@
 package eu.thehypesply.inventorytracker.repository;
 
 import eu.thehypesply.inventorytracker.model.Total;
-import org.springframework.data.mongodb.repository.MongoRepository;
-import org.springframework.stereotype.Repository;
+import org.springframework.data.jpa.repository.JpaRepository;
 
-@Repository
-public interface TotalRepository extends MongoRepository<Total, String> {
+public interface TotalRepository extends JpaRepository<Total, Long> {
 }

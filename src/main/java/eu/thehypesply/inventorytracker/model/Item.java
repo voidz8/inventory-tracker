@@ -1,38 +1,35 @@
 package eu.thehypesply.inventorytracker.model;
 
 import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
-import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.Document;
-import org.springframework.data.mongodb.core.mapping.Field;
 
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 import java.time.LocalDate;
 
 @Data
-@Document
+@Entity
 public class Item {
 
     @Id
-    private String id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private long id;
 
-    @Field
-    private String name;
-
-    @Field
+    private String itemName;
     private long priceBought;
-
-    @Field
-    private long priceSold;
-
-    @Field
+    private Long priceSold;
     private LocalDate dateBought;
-
-    @Field
     private LocalDate dateSold;
-
-    @Field
+    @OneToOne
     private Image invoice;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id")
+    private User user;
 
     public Item() {
     }

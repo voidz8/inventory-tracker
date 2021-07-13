@@ -1,13 +1,12 @@
 package eu.thehypesply.inventorytracker.repository;
 
 import eu.thehypesply.inventorytracker.model.Bot;
-import org.springframework.data.mongodb.repository.MongoRepository;
-import org.springframework.stereotype.Repository;
+import eu.thehypesply.inventorytracker.model.User;
+import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
 
-@Repository
-public interface BotRepository extends MongoRepository <Bot, String>{
-
+public interface BotRepository extends JpaRepository<Bot, Long> {
     List<Bot> findAllByBotName(String botName);
+    List<Bot> findAllByUser(User user);
 }

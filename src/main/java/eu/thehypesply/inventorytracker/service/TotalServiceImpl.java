@@ -5,7 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
-public class TotalServiceImpl implements TotalService{
+public class  TotalServiceImpl implements TotalService{
 
     @Autowired
     private TotalRepository totalRepository;

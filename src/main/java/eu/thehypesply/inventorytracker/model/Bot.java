@@ -1,42 +1,37 @@
 package eu.thehypesply.inventorytracker.model;
 
 import lombok.Data;
-import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.DBRef;
-import org.springframework.data.mongodb.core.mapping.Document;
-import org.springframework.data.mongodb.core.mapping.Field;
 
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import java.time.LocalDate;
+import java.util.Set;
 
 @Data
-@Document
+@Entity
 public class Bot {
 
     @Id
-    private String id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
-    @Field
     private String botName;
-
-    @Field
-    private String type;
-
-    @Field
     private long priceBought;
-
-    @Field
-    private long priceSold;
-
-    @Field
-    private long rentalIncome;
-
-    @Field
+    private Long priceSold;
     private LocalDate dateBought;
-
-    @Field
     private LocalDate dateSold;
 
-    @DBRef(lazy = true)
-    private BotRental botRental;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id")
+    private User user;
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "bot")
+    private Set<BotRental> botRental;
 
 }
