@@ -84,28 +84,4 @@ public class ResiProxyServiceImpl implements ResiProxyService {
         }
         return total;
     }
-
-    @Override
-    public void uploadInvoice(long id, Image image) {
-        if (!resiProxyRepository.existsById(id)) {
-            throw new ProxyNotFound();
-        }
-        ResiProxy resiProxy = resiProxyRepository.findById(id).get();
-        resiProxy.setInvoice(image);
-        resiProxyRepository.save(resiProxy);
-    }
-
-    @Override
-    public void deleteInvoice(long id) {
-        if (!resiProxyRepository.existsById(id)) {
-            throw new ProxyNotFound();
-        }
-        ResiProxy resiProxy = resiProxyRepository.findById(id).get();
-        String imageId = resiProxy.getInvoice().getId();
-        resiProxy.setInvoice(null);
-        imageService.deleteImage(imageId);
-        resiProxyRepository.save(resiProxy);
-    }
-
-
 }

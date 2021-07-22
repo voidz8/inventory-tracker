@@ -85,25 +85,4 @@ public class DCProxyServiceImpl implements DCProxyService {
         return total;
     }
 
-    @Override
-    public void uploadInvoice(long id, Image image) {
-        if (!dcProxyRepository.existsById(id)) {
-            throw new ProxyNotFound();
-        }
-        DCProxy dcProxy = dcProxyRepository.findById(id).get();
-        dcProxy.setInvoice(image);
-        dcProxyRepository.save(dcProxy);
-    }
-
-    @Override
-    public void deleteInvoice(long id) {
-        if (!dcProxyRepository.existsById(id)) {
-            throw new ProxyNotFound();
-        }
-        DCProxy dcProxy = dcProxyRepository.findById(id).get();
-        String imageId = dcProxy.getInvoice().getId();
-        dcProxy.setInvoice(null);
-        imageService.deleteImage(imageId);
-        dcProxyRepository.save(dcProxy);
-    }
 }

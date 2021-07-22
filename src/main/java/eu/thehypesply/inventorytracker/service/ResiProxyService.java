@@ -21,8 +21,4 @@ public interface ResiProxyService {
     void deleteProxy(long id);
 
     long spendOnProxies();
-
-    void uploadInvoice(long id, Image image);
-
-    void deleteInvoice(long id);
 }

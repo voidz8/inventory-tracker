@@ -30,8 +30,6 @@ public class DCProxyController {
     @Autowired
     private DCProxyService dcProxyService;
 
-    @Autowired
-    private ImageService imageService;
 
     @GetMapping(value = "/all")
     public ResponseEntity<Object> getAllDcProxies() {
@@ -66,16 +64,4 @@ public class DCProxyController {
         return new ResponseEntity<>("You have spend $" + dcProxyService.spendOnDcProxies() + " on datacenter proxies.", HttpStatus.OK);
     }
 
-    @PostMapping(value = "/{id}/invoice")
-    public ResponseEntity<Object> addInvoice(@PathVariable(value = "id") long id, @RequestParam("file") MultipartFile file) {
-        Image image = imageService.storeImage(file);
-        dcProxyService.uploadInvoice(id, image);
-        return new ResponseEntity<>("Successfully uploaded invoice.", HttpStatus.OK);
-    }
-
-    @DeleteMapping(value = "/{id}/invoice")
-    public ResponseEntity<Object> deleteInvoice(@PathVariable(value = "id") long id) {
-        dcProxyService.deleteInvoice(id);
-        return new ResponseEntity<>("Successfully deleted invoice.", HttpStatus.NO_CONTENT);
-    }
 }

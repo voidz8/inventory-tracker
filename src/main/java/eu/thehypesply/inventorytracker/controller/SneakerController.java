@@ -9,7 +9,6 @@ import eu.thehypesply.inventorytracker.service.user.UserDetailsImpl;
 import eu.thehypesply.inventorytracker.service.user.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -21,13 +20,13 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.Map;
 
-@CrossOrigin(origins = "http://localhost:3000")
+@CrossOrigin(origins = "http://localhost:3000", maxAge = 3600)
 @RestController
 @RequestMapping(value = "/sneakers")
 public class SneakerController {
@@ -54,12 +53,13 @@ public class SneakerController {
         return new ResponseEntity<>(sneakerService.getSneaker(id), HttpStatus.OK);
     }
 
+
     @PostMapping(value = "", consumes = {"multipart/form-data"})
-    public ResponseEntity<Object> createSneakerManual(@ModelAttribute Sneaker sneaker, Authentication authentication, @ModelAttribute MultipartFile photo, @ModelAttribute MultipartFile invoice) {
-        Image uploadedPhoto = imageService.storeImage(photo);
-        Image uploadedInvoice = imageService.storeImage(invoice);
-        String newSneaker = sneakerService.createSneakerManual(sneaker, authentication, uploadedPhoto, uploadedInvoice);
-        return new ResponseEntity<>("Successfully created: " + newSneaker, HttpStatus.CREATED);
+    public ResponseEntity<Object> createSneakerManual(@ModelAttribute Sneaker sneaker, Authentication authentication, @ModelAttribute MultipartFile photo) throws IOException {
+        Image image = imageService.saveImage(photo);
+        Sneaker newSneaker = sneakerService.createSneakerManual(sneaker, authentication, image);
+        imageService.saveImage(photo);
+        return new ResponseEntity<>("Successfully created: " + newSneaker.getSneakerName(), HttpStatus.CREATED);
     }
 
     @DeleteMapping(value = "/{id}")
@@ -94,10 +94,15 @@ public class SneakerController {
         return new ResponseEntity<>(sneakerService.getSneakerData(auth), HttpStatus.OK);
     }
 
-//    @PostMapping(value = "/{id}/picture")
-//    public ResponseEntity<Object> addPicture(@PathVariable(value = "id") String id, @RequestParam("file") MultipartFile file){
-//        Image image = imageService.storeImage(file);
-//        sneakerService.
-//    }
+    @GetMapping(value = "/sold")
+    public ResponseEntity<Object> getSoldSneakers(Authentication auth) {
+        return new ResponseEntity<>(sneakerService.getAllSoldSneakers(auth), HttpStatus.OK);
+    }
+
+    @PostMapping(value = "/sell/{id}")
+    public ResponseEntity<Object> sellSneaker(@PathVariable(value = "id") long id, int priceSold){
+        sneakerService.sold(id,priceSold);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
 
 }

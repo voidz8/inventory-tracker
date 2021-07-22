@@ -5,17 +5,18 @@ import eu.thehypesply.inventorytracker.model.Image;
 import eu.thehypesply.inventorytracker.model.Item;
 import org.springframework.security.core.Authentication;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
 public interface ItemService {
 
-    List<Item> getAllClothing();
+    List<Item> getAllClothing(Authentication auth);
 
     Optional<Item> getClothing(long id);
 
-    String createClothing(Item item);
+    Item createItem(Item item , Authentication auth, Image image) throws IOException;
 
     void deleteClothing(long id);
 
@@ -27,9 +28,6 @@ public interface ItemService {
 
     long getBalance();
 
-    void uploadInvoice(long id, Image image);
-
-    void deleteInvoice(long id);
 
     List<DataDto> getItemData(Authentication auth);
 }

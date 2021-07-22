@@ -16,9 +16,17 @@ import eu.thehypesply.inventorytracker.service.user.UserDetailsImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -40,85 +48,26 @@ public class SneakerServiceImpl implements SneakerService {
 
 
     public List<Sneaker> getAllSneakers(User user) {
-        return sneakerRepository.findAllByUser(user);
+        List<Sneaker> sneakers = sneakerRepository.findAllByUser(user);
+        Collections.sort(sneakers);
+        return sneakers;
     }
 
     public Optional<Sneaker> getSneaker(long id) {
         return sneakerRepository.findById(id);
     }
 
-//    public String createSneaker(Sneaker sneaker) throws InterruptedException, IOException {
-//        System.setProperty("webdriver.chrome.driver", "C://Users//renzo//OneDrive//Documenten//programming//chromedriver.exe");
-//        ChromeOptions options = new ChromeOptions();
-//        String userAgent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/89.0.4389.114 Safari/537.36";
-//        //options.addArguments("--headless");
-//        options.addArguments("user-agent="+userAgent);
-//        options.addArguments("--disable-web-security");
-//        options.addArguments("--allow-running-insecure-content");
-//        options.addArguments("--allow-cross-origin-auth-prompt");
-//        String url = "https://stockx.com";
-//        WebDriver driver = new ChromeDriver(options);
-//
-//        Sneaker newSneaker = new Sneaker();
-//        newSneaker.setId(sneaker.getId());
-//        newSneaker.setPid(sneaker.getPid());
-//        newSneaker.setSize(sneaker.getSize());
-//        newSneaker.setPriceBought(sneaker.getPriceBought());
-//        //load stockx and close popup
-//        driver.get(url);
-//        Thread.sleep(1200);
-//        driver.findElement(By.xpath("//button[@aria-label='Close']")).click();
-//        Thread.sleep(1450);
-//        //search sneaker with pid
-//        driver.findElement(By.name("q")).sendKeys(sneaker.getPid(), Keys.ENTER);
-//        Thread.sleep(1100);
-//        //load sneaker page
-//        try {
-//            driver.findElement(By.xpath("//*[@id='main-content']/div[2]/div[2]/div")).click();
-//            Thread.sleep(1400);
-//            //get sneakername
-//            String title = driver.getTitle();
-//            String name = title.substring(0,title.indexOf("-"));
-//            //get image url
-//            WebElement img = driver.findElement(By.xpath("//img[@type='image/jpeg']"));
-//            String imUrl = img.getAttribute("srcset");
-//            int lastIndex = imUrl.indexOf(".jpg")+4;
-//            URL imageUrl = new URL(imUrl.substring(0,lastIndex));
-//            //get image
-//            InputStream in = new BufferedInputStream(imageUrl.openStream());
-//            ByteArrayOutputStream out = new ByteArrayOutputStream();
-//            byte[] buf = new byte[1024];
-//            int n;
-//            while (-1!=(n=in.read(buf)))
-//            {
-//                out.write(buf, 0, n);
-//            }
-//            out.close();
-//            in.close();
-//            byte[] image = out.toByteArray();
-//            //set image
-//            newSneaker.setPhoto(image);
-//            //set name
-//            newSneaker.setSneakerName(name);
-//            driver.close();
-//            sneakerRepository.save(newSneaker);
-//        }catch (Exception e){
-//            System.out.println("Can't find sneaker with stylecode " + sneaker.getPid() +" try to add the sneaker manually.");
-//        }
-//
-//        return newSneaker.getSneakerName();
-//
-//    }
 
     @Override
-    public String createSneakerManual(Sneaker sneaker, Authentication auth, Image photo, Image invoice) {
+    public Sneaker createSneakerManual(Sneaker sneaker, Authentication auth, Image image) throws IOException {
         UserDetailsImpl userDetails = (UserDetailsImpl) auth.getPrincipal();
         User user = userRepository.findByUsername(userDetails.getUsername()).orElseThrow(() -> new UserNotFoundException("User not found")
         );
         sneaker.setDateBought(LocalDate.now());
         sneaker.setUser(user);
+        sneaker.setImage(image);
         sneakerRepository.save(sneaker);
-        return sneaker.getSneakerName();
+        return sneaker;
     }
 
     public void deleteSneaker(long id) {
@@ -224,4 +173,19 @@ public class SneakerServiceImpl implements SneakerService {
 
         return sortedData;
     }
+
+    @Override
+    public List<Sneaker> getAllSoldSneakers(Authentication auth) {
+        UserDetailsImpl userDetails = (UserDetailsImpl) auth.getPrincipal();
+        User user = userRepository.findByUsername(userDetails.getUsername()).orElseThrow(UserNotFoundException::new);
+        List<Sneaker> sneakers = sneakerRepository.findAllByUser(user);
+        List<Sneaker> soldSneakers = new ArrayList<>();
+        for (Sneaker sneaker : sneakers){
+            if (sneaker.getDateSold() != null){
+                soldSneakers.add(sneaker);
+            }
+        }
+        return soldSneakers;
+    }
+
 }

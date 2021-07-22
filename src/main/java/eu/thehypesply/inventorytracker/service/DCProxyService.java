@@ -20,8 +20,4 @@ public interface DCProxyService {
     void deleteDCProxy(long id);
 
     long spendOnDcProxies();
-
-    void uploadInvoice(long id, Image image);
-
-    void deleteInvoice(long id);
 }

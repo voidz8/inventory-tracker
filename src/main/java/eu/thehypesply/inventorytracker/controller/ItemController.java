@@ -11,15 +11,16 @@ import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.Map;
 
 @RestController
@@ -34,8 +35,8 @@ public class ItemController {
     private ImageService imageService;
 
     @GetMapping(value = "/all")
-    public ResponseEntity<Object> getAllClothing() {
-        return new ResponseEntity<>(itemService.getAllClothing(), HttpStatus.OK);
+    public ResponseEntity<Object> getAllClothing(Authentication auth) {
+        return new ResponseEntity<>(itemService.getAllClothing(auth), HttpStatus.OK);
     }
 
     @GetMapping(value = "/{id}")
@@ -43,10 +44,12 @@ public class ItemController {
         return new ResponseEntity<>(itemService.getClothing(id), HttpStatus.OK);
     }
 
-    @PostMapping(value = "")
-    public ResponseEntity<Object> createClothing(@RequestBody Item item) {
-        String newCloting = itemService.createClothing(item);
-        return new ResponseEntity<>("Successfully created " + newCloting, HttpStatus.CREATED);
+    @PostMapping(value = "", consumes = {"multipart/form-data"})
+    public ResponseEntity<Object> createClothing(@ModelAttribute Item item, Authentication auth, @ModelAttribute MultipartFile photo) throws IOException {
+        Image image = imageService.saveImage(photo);
+        Item newItem = itemService.createItem(item, auth, image);
+        imageService.saveImage(photo);
+        return new ResponseEntity<>("Successfully created " + newItem.getItemName() , HttpStatus.CREATED);
     }
 
     @DeleteMapping(value = "/{id}")
@@ -74,19 +77,6 @@ public class ItemController {
     @GetMapping(value = "/balance")
     public ResponseEntity<Object> getBalance() {
         return new ResponseEntity<>("Your balance is $" + itemService.getBalance(), HttpStatus.OK);
-    }
-
-    @PostMapping(value = "/{id}/invoice")
-    public ResponseEntity<Object> addInvoice(@PathVariable(value = "id") long id, @RequestParam("file") MultipartFile file) {
-        Image image = imageService.storeImage(file);
-        itemService.uploadInvoice(id, image);
-        return new ResponseEntity<>("Successfully uploaded invoice.", HttpStatus.OK);
-    }
-
-    @DeleteMapping(value = "/{id}/invoice")
-    public ResponseEntity<Object> deleteInvoice(@PathVariable(value = "id") long id) {
-        itemService.deleteInvoice(id);
-        return new ResponseEntity<>("Successfully deleted invoice.", HttpStatus.NO_CONTENT);
     }
 
     @GetMapping(value = "/data")

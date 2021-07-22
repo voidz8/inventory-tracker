@@ -65,16 +65,4 @@ public class ResiProxyController {
         return new ResponseEntity<>("You have spend $" + resiProxyService.spendOnProxies() + " on residential proxies.", HttpStatus.OK);
     }
 
-    @PostMapping(value = "/{id}/invoice")
-    public ResponseEntity<Object> addInvoice(@PathVariable(value = "id") long id, @RequestParam("file") MultipartFile file) {
-        Image image = imageService.storeImage(file);
-        resiProxyService.uploadInvoice(id, image);
-        return new ResponseEntity<>("Successfully uploaded invoice", HttpStatus.OK);
-    }
-
-    @DeleteMapping(value = "/{id}/invoice")
-    public ResponseEntity<Object> deleteInvoice(@PathVariable(value = "id") long id) {
-        resiProxyService.deleteInvoice(id);
-        return new ResponseEntity<>("Successfully deleted invoice.", HttpStatus.NO_CONTENT);
-    }
 }

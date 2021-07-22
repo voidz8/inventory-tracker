@@ -2,6 +2,7 @@ package eu.thehypesply.inventorytracker.model;
 
 import lombok.Data;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -21,12 +22,14 @@ public class Item {
     private long id;
 
     private String itemName;
+    private String itemSize;
     private long priceBought;
     private Long priceSold;
     private LocalDate dateBought;
     private LocalDate dateSold;
-    @OneToOne
-    private Image invoice;
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "image_id", referencedColumnName = "id")
+    private Image image;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User user;

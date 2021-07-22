@@ -1,26 +1,21 @@
 package eu.thehypesply.inventorytracker.service;
 
-import eu.thehypesply.inventorytracker.dto.DataBoughtDto;
 import eu.thehypesply.inventorytracker.dto.DataDto;
-import eu.thehypesply.inventorytracker.dto.DataSoldDto;
 import eu.thehypesply.inventorytracker.exception.ClothingNotFound;
 import eu.thehypesply.inventorytracker.exception.UserNotFoundException;
 import eu.thehypesply.inventorytracker.model.Image;
 import eu.thehypesply.inventorytracker.model.Item;
-import eu.thehypesply.inventorytracker.model.Sneaker;
 import eu.thehypesply.inventorytracker.model.User;
 import eu.thehypesply.inventorytracker.repository.ItemRepository;
 import eu.thehypesply.inventorytracker.repository.UserRepository;
 import eu.thehypesply.inventorytracker.service.user.UserDetailsImpl;
-import org.apache.tomcat.jni.Local;
+import eu.thehypesply.inventorytracker.service.user.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -35,11 +30,17 @@ public class ItemServiceImpl implements ItemService {
     private ImageService imageService;
 
     @Autowired
+    private UserService userService;
+
+    @Autowired
     private UserRepository userRepository;
 
     @Override
-    public List<Item> getAllClothing() {
-        return itemRepository.findAll();
+    public List<Item> getAllClothing(Authentication auth) {
+        UserDetailsImpl userDetails = (UserDetailsImpl) auth.getPrincipal();
+        String userName = userDetails.getUsername();
+        User user = userService.getUserByUsername(userName);
+        return itemRepository.findAllByUser(user);
     }
 
     @Override
@@ -51,9 +52,14 @@ public class ItemServiceImpl implements ItemService {
     }
 
     @Override
-    public String createClothing(Item item) {
-        Item newItem = itemRepository.save(item);
-        return newItem.getItemName();
+    public Item createItem(Item item, Authentication auth, Image image) {
+        UserDetailsImpl userDetails = (UserDetailsImpl) auth.getPrincipal();
+        User user = userService.getUserByUsername(userDetails.getUsername());
+        item.setDateBought(LocalDate.now());
+        item.setUser(user);
+        item.setImage(image);
+        itemRepository.save(item);
+        return item;
     }
 
     @Override
@@ -110,27 +116,6 @@ public class ItemServiceImpl implements ItemService {
         return getTotalSold() - getTotalBought();
     }
 
-    @Override
-    public void uploadInvoice(long id, Image image) {
-        if (!itemRepository.existsById(id)) {
-            throw new ClothingNotFound();
-        }
-        Item item = itemRepository.findById(id).get();
-        item.setInvoice(image);
-        itemRepository.save(item);
-    }
-
-    @Override
-    public void deleteInvoice(long id) {
-        if (!itemRepository.existsById(id)) {
-            throw new ClothingNotFound();
-        }
-        Item item = itemRepository.findById(id).get();
-        String imageId = item.getInvoice().getId();
-        item.setInvoice(null);
-        imageService.deleteImage(imageId);
-        itemRepository.save(item);
-    }
 
     @Override
     public List<DataDto> getItemData(Authentication auth) {
@@ -151,14 +136,14 @@ public class ItemServiceImpl implements ItemService {
                 itemData.add(dataSoldDto);
             }
         }
-        for (int i = 0; i < 30; i++ ){
+        for (int i = 0; i < 30; i++) {
             DataDto dto = new DataDto(LocalDate.now().minusDays(i), 0, 0);
             sortedData.add(dto);
         }
-        for (DataDto sorteditem : sortedData){
-            for (DataDto item: itemData) {
-                if (item.getDate().equals(sorteditem.getDate())){
-                    sorteditem.setPriceSold(sorteditem.getPriceSold()+ item.getPriceSold());
+        for (DataDto sorteditem : sortedData) {
+            for (DataDto item : itemData) {
+                if (item.getDate().equals(sorteditem.getDate())) {
+                    sorteditem.setPriceSold(sorteditem.getPriceSold() + item.getPriceSold());
                     sorteditem.setPriceBought(sorteditem.getPriceBought() + item.getPriceBought());
                 }
             }
