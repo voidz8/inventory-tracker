@@ -24,7 +24,7 @@ public class Item {
     private String itemName;
     private String itemSize;
     private long priceBought;
-    private Long priceSold;
+    private Integer priceSold;
     private LocalDate dateBought;
     private LocalDate dateSold;
     @OneToOne(cascade = CascadeType.ALL)

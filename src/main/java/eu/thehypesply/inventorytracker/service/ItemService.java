@@ -12,9 +12,11 @@ import java.util.Optional;
 
 public interface ItemService {
 
-    List<Item> getAllClothing(Authentication auth);
+    List<Item> getAllItems(Authentication auth);
 
-    Optional<Item> getClothing(long id);
+    Optional<Item> getItem(long id);
+
+    List<Item> getSoldItems(Authentication auth);
 
     Item createItem(Item item , Authentication auth, Image image) throws IOException;
 
@@ -27,6 +29,8 @@ public interface ItemService {
     long getTotalSold();
 
     long getBalance();
+
+    void sell(long id, int priceSold);
 
 
     List<DataDto> getItemData(Authentication auth);

@@ -36,12 +36,12 @@ public class ItemController {
 
     @GetMapping(value = "/all")
     public ResponseEntity<Object> getAllClothing(Authentication auth) {
-        return new ResponseEntity<>(itemService.getAllClothing(auth), HttpStatus.OK);
+        return new ResponseEntity<>(itemService.getAllItems(auth), HttpStatus.OK);
     }
 
     @GetMapping(value = "/{id}")
     public ResponseEntity<Object> getClothing(@PathVariable(value = "id") long id) {
-        return new ResponseEntity<>(itemService.getClothing(id), HttpStatus.OK);
+        return new ResponseEntity<>(itemService.getItem(id), HttpStatus.OK);
     }
 
     @PostMapping(value = "", consumes = {"multipart/form-data"})
@@ -82,5 +82,16 @@ public class ItemController {
     @GetMapping(value = "/data")
     public ResponseEntity<Object> getItemData(Authentication auth) {
         return new ResponseEntity<>(itemService.getItemData(auth), HttpStatus.OK);
+    }
+
+    @GetMapping(value = "/sold-items")
+    public ResponseEntity<Object> getSoldItems(Authentication auth){
+        return new ResponseEntity<>(itemService.getSoldItems(auth), HttpStatus.OK);
+    }
+
+    @PostMapping(value = "/sell/{id}")
+    public ResponseEntity<Object> sellItem(long id, int priceSold){
+        itemService.sell(id, priceSold);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 }

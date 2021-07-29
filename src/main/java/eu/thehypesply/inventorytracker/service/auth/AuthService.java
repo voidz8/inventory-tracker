@@ -1,5 +1,6 @@
 package eu.thehypesply.inventorytracker.service.auth;
 
+import eu.thehypesply.inventorytracker.dto.AccountDto;
 import eu.thehypesply.inventorytracker.model.ERole;
 import eu.thehypesply.inventorytracker.model.Role;
 import eu.thehypesply.inventorytracker.model.User;
@@ -10,6 +11,7 @@ import eu.thehypesply.inventorytracker.payload.response.SignUpResponse;
 import eu.thehypesply.inventorytracker.repository.RoleRepository;
 import eu.thehypesply.inventorytracker.repository.UserRepository;
 import eu.thehypesply.inventorytracker.service.user.UserDetailsImpl;
+import eu.thehypesply.inventorytracker.service.user.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -39,6 +41,7 @@ public class AuthService {
     private AuthenticationManager authenticationManager;
     private JwtUtils jwtUtils;
 
+
     @Autowired
     public void setUserRepository(UserRepository userRepository) {
         this.userRepository = userRepository;
@@ -59,10 +62,12 @@ public class AuthService {
         this.authenticationManager = authenticationManager;
     }
 
+
     @Autowired
     public void setJwtUtils(JwtUtils jwtUtils) {
         this.jwtUtils = jwtUtils;
     }
+
 
     public ResponseEntity<SignUpResponse> registerUser(@Valid SignupRequest signupRequest) {
         if (Boolean.TRUE.equals(userRepository.existsByUsername(signupRequest.getUsername()))) {
@@ -82,9 +87,9 @@ public class AuthService {
         Set<String> strRoles = signupRequest.getRole();
         Set<Role> roles = new HashSet<>();
 
-        if (strRoles == null){
+        if (strRoles == null) {
             Role userRole = roleRepository.findByName(ERole.ROLE_USER)
-                    .orElseThrow(()-> new RuntimeException(ROLE_NOT_FOUND_ERROR));
+                    .orElseThrow(() -> new RuntimeException(ROLE_NOT_FOUND_ERROR));
             roles.add(userRole);
         } else {
             strRoles.forEach(role -> {

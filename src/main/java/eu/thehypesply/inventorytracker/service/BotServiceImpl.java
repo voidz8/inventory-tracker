@@ -8,6 +8,7 @@ import eu.thehypesply.inventorytracker.model.User;
 import eu.thehypesply.inventorytracker.repository.BotRepository;
 import eu.thehypesply.inventorytracker.repository.UserRepository;
 import eu.thehypesply.inventorytracker.service.user.UserDetailsImpl;
+import eu.thehypesply.inventorytracker.service.user.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
@@ -25,11 +26,16 @@ public class BotServiceImpl implements BotService {
     private BotRepository botRepository;
 
     @Autowired
+    private UserService userService;
+
+    @Autowired
     private UserRepository userRepository;
 
     @Override
-    public List<Bot> getAllBots() {
-        return botRepository.findAll();
+    public List<Bot> getAllBots(Authentication auth) {
+        UserDetailsImpl userDetails = (UserDetailsImpl) auth.getPrincipal();
+        User user = userService.getUserByUsername(userDetails.getUsername());
+        return botRepository.findAllByUser(user);
     }
 
     @Override
@@ -102,14 +108,6 @@ public class BotServiceImpl implements BotService {
     public long totalBalance() {
         return totalBotSales() - totalBotInvestment();
     }
-
-//    @Override
-//    public long addRentalIncome(String id, BotRental botRental) {
-//        Bot bot = botRepository.findById(id).get();
-//        bot.setRentalIncome(bot.getRentalIncome() + botRental.getPrice());
-//        return bot.getRentalIncome();
-//    }
-
 
     @Override
     public List<DataDto> getBotData(Authentication auth) {

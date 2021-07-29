@@ -27,8 +27,8 @@ public class BotController {
     private BotService botService;
 
     @GetMapping(value = "/all")
-    public ResponseEntity<Object> getAllBots() {
-        return new ResponseEntity<>(botService.getAllBots(), HttpStatus.OK);
+    public ResponseEntity<Object> getAllBots(Authentication auth) {
+        return new ResponseEntity<>(botService.getAllBots(auth), HttpStatus.OK);
     }
 
     @GetMapping(value = "/{id}")

@@ -27,24 +27,20 @@ public class ItemServiceImpl implements ItemService {
     private ItemRepository itemRepository;
 
     @Autowired
-    private ImageService imageService;
-
-    @Autowired
     private UserService userService;
 
     @Autowired
     private UserRepository userRepository;
 
     @Override
-    public List<Item> getAllClothing(Authentication auth) {
+    public List<Item> getAllItems(Authentication auth) {
         UserDetailsImpl userDetails = (UserDetailsImpl) auth.getPrincipal();
-        String userName = userDetails.getUsername();
-        User user = userService.getUserByUsername(userName);
+        User user = userService.getUserByUsername(userDetails.getUsername());
         return itemRepository.findAllByUser(user);
     }
 
     @Override
-    public Optional<Item> getClothing(long id) {
+    public Optional<Item> getItem(long id) {
         if (!itemRepository.existsById(id)) {
             throw new ClothingNotFound();
         }
@@ -82,7 +78,7 @@ public class ItemServiceImpl implements ItemService {
                     item.setPriceBought((Integer) fields.get(field));
                     break;
                 case "priceSold":
-                    item.setPriceSold((Long) fields.get(field));
+                    item.setPriceSold((Integer) fields.get(field));
                     break;
             }
         }
@@ -152,4 +148,19 @@ public class ItemServiceImpl implements ItemService {
         return sortedData;
     }
 
+    @Override
+    public List<Item> getSoldItems(Authentication auth) {
+        UserDetailsImpl userDetails = (UserDetailsImpl) auth.getPrincipal();
+        User user = userService.getUserByUsername(userDetails.getUsername());
+        return itemRepository.findAllByUserAndPriceSoldIsNotNull(user);
+
+    }
+
+    @Override
+    public void sell(long id, int priceSold) {
+        Item item = itemRepository.findById(id).get();
+        item.setDateSold(LocalDate.now());
+        item.setPriceSold(priceSold);
+        itemRepository.save(item);
+    }
 }

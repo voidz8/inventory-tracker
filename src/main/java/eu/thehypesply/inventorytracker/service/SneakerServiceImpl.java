@@ -178,14 +178,7 @@ public class SneakerServiceImpl implements SneakerService {
     public List<Sneaker> getAllSoldSneakers(Authentication auth) {
         UserDetailsImpl userDetails = (UserDetailsImpl) auth.getPrincipal();
         User user = userRepository.findByUsername(userDetails.getUsername()).orElseThrow(UserNotFoundException::new);
-        List<Sneaker> sneakers = sneakerRepository.findAllByUser(user);
-        List<Sneaker> soldSneakers = new ArrayList<>();
-        for (Sneaker sneaker : sneakers){
-            if (sneaker.getDateSold() != null){
-                soldSneakers.add(sneaker);
-            }
-        }
-        return soldSneakers;
+        return sneakerRepository.findAllByUserAndSalePriceIsNotNull(user);
     }
 
 }

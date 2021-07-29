@@ -10,7 +10,7 @@ import java.util.Optional;
 
 public interface BotService {
 
-    List<Bot> getAllBots();
+    List<Bot> getAllBots(Authentication auth);
 
     Optional<Bot> getBot(long id);
 

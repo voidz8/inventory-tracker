@@ -1,8 +1,11 @@
 package eu.thehypesply.inventorytracker.service.user;
 
+import eu.thehypesply.inventorytracker.dto.AccountDto;
 import eu.thehypesply.inventorytracker.model.User;
 import eu.thehypesply.inventorytracker.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
@@ -22,5 +25,13 @@ public class UserServiceImpl implements UserService {
     public User getUserByUsername(String username){
         User user = userRepository.findByUsername(username).orElseThrow(() -> new UsernameNotFoundException("User Not Found" + username));
         return user;
+    }
+
+    @Override
+    public AccountDto getAccountInfo(Authentication auth) {
+            UserDetailsImpl userDetails = (UserDetailsImpl) auth.getPrincipal();
+            String username = userDetails.getUsername();
+            User user = getUserByUsername(username);
+            return new AccountDto(user.getId(), username, userDetails.getEmail());
     }
 }

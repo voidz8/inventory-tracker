@@ -4,6 +4,7 @@ import eu.thehypesply.inventorytracker.exception.BotRentalNotFound;
 import eu.thehypesply.inventorytracker.model.Bot;
 import eu.thehypesply.inventorytracker.model.BotRental;
 import eu.thehypesply.inventorytracker.repository.BotRentalRepository;
+import eu.thehypesply.inventorytracker.repository.BotRepository;
 import eu.thehypesply.inventorytracker.repository.TotalRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -22,10 +23,7 @@ public class BotRentalServiceImpl implements BotRentalService {
     private BotRentalRepository botRentalRepository;
 
     @Autowired
-    private TotalRepository totalRepository;
-
-//    @Autowired
-//    private BotRepository botRepository;
+    private BotRepository botRepository;
 
     @Override
     public List<BotRental> getAllBotRentals() {

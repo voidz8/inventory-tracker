@@ -12,4 +12,5 @@ import java.util.List;
 public interface SneakerRepository extends JpaRepository<Sneaker, Long> {
 
     List<Sneaker> findAllByUser(User user);
+    List<Sneaker> findAllByUserAndSalePriceIsNotNull(User user);
 }
