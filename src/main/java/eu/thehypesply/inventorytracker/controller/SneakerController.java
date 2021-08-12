@@ -1,5 +1,6 @@
 package eu.thehypesply.inventorytracker.controller;
 
+import eu.thehypesply.inventorytracker.dto.PriceSoldDto;
 import eu.thehypesply.inventorytracker.model.Image;
 import eu.thehypesply.inventorytracker.model.Sneaker;
 import eu.thehypesply.inventorytracker.model.User;
@@ -20,13 +21,14 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.Map;
 
-@CrossOrigin(origins = "http://localhost:3000", maxAge = 3600)
+@CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
 @RequestMapping(value = "/sneakers")
 public class SneakerController {
@@ -100,8 +102,8 @@ public class SneakerController {
     }
 
     @PostMapping(value = "/sell/{id}")
-    public ResponseEntity<Object> sellSneaker(@PathVariable(value = "id") long id, int priceSold){
-        sneakerService.sold(id,priceSold);
+    public ResponseEntity<Object> sellSneaker(@PathVariable(value = "id") long id, @RequestBody PriceSoldDto priceSold) {
+        sneakerService.sold(id, priceSold.getPriceSold());
         return new ResponseEntity<>(HttpStatus.OK);
     }
 

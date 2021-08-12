@@ -9,7 +9,7 @@ import java.util.Set;
 
 public class SignupRequest {
     @NotBlank
-    @Size(min = 5, max = 20)
+    @Size(min = 4, max = 20)
     @Getter
     @Setter
     private String username;

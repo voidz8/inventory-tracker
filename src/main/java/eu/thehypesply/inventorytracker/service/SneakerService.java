@@ -30,7 +30,7 @@ public interface SneakerService {
 
     long getBalance();
 
-    void sold(long id, int priceSold);
+    void sold(long id, Long priceSold);
 
     List<Sneaker> getAllSoldSneakers(Authentication auth);
 

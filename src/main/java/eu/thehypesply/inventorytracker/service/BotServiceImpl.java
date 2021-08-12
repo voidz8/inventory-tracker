@@ -4,6 +4,7 @@ import eu.thehypesply.inventorytracker.dto.DataDto;
 import eu.thehypesply.inventorytracker.exception.BotNotFound;
 import eu.thehypesply.inventorytracker.exception.UserNotFoundException;
 import eu.thehypesply.inventorytracker.model.Bot;
+import eu.thehypesply.inventorytracker.model.Image;
 import eu.thehypesply.inventorytracker.model.User;
 import eu.thehypesply.inventorytracker.repository.BotRepository;
 import eu.thehypesply.inventorytracker.repository.UserRepository;
@@ -31,11 +32,12 @@ public class BotServiceImpl implements BotService {
     @Autowired
     private UserRepository userRepository;
 
+
     @Override
     public List<Bot> getAllBots(Authentication auth) {
         UserDetailsImpl userDetails = (UserDetailsImpl) auth.getPrincipal();
         User user = userService.getUserByUsername(userDetails.getUsername());
-        return botRepository.findAllByUser(user);
+        return botRepository.findAllByUserAndPriceSoldIsNull(user);
     }
 
     @Override
@@ -47,7 +49,19 @@ public class BotServiceImpl implements BotService {
     }
 
     @Override
-    public String createBot(Bot bot) {
+    public List<Bot> getAllSoldBots(Authentication auth) {
+        UserDetailsImpl userDetails = (UserDetailsImpl) auth.getPrincipal();
+        User user = userRepository.findByUsername(userDetails.getUsername()).orElseThrow(UserNotFoundException::new);
+        return botRepository.findAllByUserAndPriceSoldIsNotNull(user);
+    }
+
+    @Override
+    public String createBot(Bot bot, Authentication auth, Image image) {
+        UserDetailsImpl userDetails = (UserDetailsImpl) auth.getPrincipal();
+        User user = userRepository.findByUsername(userDetails.getUsername()).orElseThrow(() -> new UserNotFoundException("User not found"));
+        bot.setDateBought(LocalDate.now());
+        bot.setUser(user);
+        bot.setImage(image);
         Bot newBot = botRepository.save(bot);
         return newBot.getBotName();
     }
@@ -124,7 +138,7 @@ public class BotServiceImpl implements BotService {
             if (bot.getDateSold() != null && bot.getDateSold().isAfter(LocalDate.now().minusDays(30))) {
                 DataDto dataSoldDto = new DataDto();
                 dataSoldDto.setDate(bot.getDateSold());
-                dataSoldDto.setPriceSold(bot.getPriceSold());
+                dataSoldDto.setSell(bot.getPriceSold());
                 itemData.add(dataSoldDto);
             }
         }
@@ -135,12 +149,20 @@ public class BotServiceImpl implements BotService {
         for (DataDto sorteditem : sortedData) {
             for (DataDto item : itemData) {
                 if (item.getDate().equals(sorteditem.getDate())) {
-                    sorteditem.setPriceSold(sorteditem.getPriceSold() + item.getPriceSold());
-                    sorteditem.setPriceBought(sorteditem.getPriceBought() + item.getPriceBought());
+                    sorteditem.setSell(sorteditem.getSell() + item.getSell());
+                    sorteditem.setBuy(sorteditem.getBuy() + item.getBuy());
                 }
             }
         }
 
         return sortedData;
+    }
+
+    @Override
+    public void sellBot(long id, Long priceSold) {
+        Bot bot = botRepository.findById(id).get();
+        bot.setDateSold(LocalDate.now());
+        bot.setPriceSold(priceSold);
+        botRepository.save(bot);
     }
 }

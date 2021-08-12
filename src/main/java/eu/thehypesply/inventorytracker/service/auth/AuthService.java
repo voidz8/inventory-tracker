@@ -1,6 +1,7 @@
 package eu.thehypesply.inventorytracker.service.auth;
 
 import eu.thehypesply.inventorytracker.dto.AccountDto;
+import eu.thehypesply.inventorytracker.exception.UserNotFoundException;
 import eu.thehypesply.inventorytracker.model.ERole;
 import eu.thehypesply.inventorytracker.model.Role;
 import eu.thehypesply.inventorytracker.model.User;
@@ -110,7 +111,7 @@ public class AuthService {
         return ResponseEntity.ok(new SignUpResponse("User successfully registered."));
     }
 
-    public ResponseEntity<JwtResponse> authenticateUser(@Valid LoginRequest loginRequest) {
+    public ResponseEntity<Object> authenticateUser(@Valid LoginRequest loginRequest) {
 
         Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword()));
 
@@ -122,6 +123,18 @@ public class AuthService {
                 .map(GrantedAuthority::getAuthority)
                 .collect(Collectors.toList());
 
+        if (!userRepository.existsByUsername(loginRequest.getUsername())){
+            return ResponseEntity.badRequest().body("Account does not exist.");
+        }
+
         return ResponseEntity.ok(new JwtResponse(jwt, userDetails.getUsername(), userDetails.getEmail(), roles));
+    }
+
+    public ResponseEntity<Object> authenticateUserNoJwt(@Valid LoginRequest loginRequest, Authentication auth){
+        UserDetailsImpl userDetails = (UserDetailsImpl) auth.getPrincipal();
+        User user = userRepository.findByUsername(userDetails.getUsername()).orElseThrow(UserNotFoundException::new);
+        if (user.getUsername().equals(loginRequest.getUsername())){
+            return ResponseEntity.ok().body("Succesfully authenticated");
+        }else return ResponseEntity.notFound().build();
     }
 }

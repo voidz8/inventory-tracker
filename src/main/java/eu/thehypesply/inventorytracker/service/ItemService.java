@@ -30,7 +30,7 @@ public interface ItemService {
 
     long getBalance();
 
-    void sell(long id, int priceSold);
+    void sell(long id, Long priceSold);
 
 
     List<DataDto> getItemData(Authentication auth);

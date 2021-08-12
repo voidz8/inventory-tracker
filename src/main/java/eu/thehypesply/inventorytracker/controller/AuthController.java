@@ -1,6 +1,7 @@
 package eu.thehypesply.inventorytracker.controller;
 
 import eu.thehypesply.inventorytracker.dto.AccountDto;
+import eu.thehypesply.inventorytracker.model.User;
 import eu.thehypesply.inventorytracker.payload.request.LoginRequest;
 import eu.thehypesply.inventorytracker.payload.request.SignupRequest;
 import eu.thehypesply.inventorytracker.payload.response.JwtResponse;
@@ -13,6 +14,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -28,11 +30,11 @@ public class AuthController {
     UserService userService;
 
     @PostMapping("/signin")
-    public ResponseEntity<JwtResponse> authenticateUser(@RequestBody LoginRequest loginRequest){
+    public ResponseEntity<Object> authenticateUser(@RequestBody LoginRequest loginRequest){
         return authService.authenticateUser(loginRequest);
     }
 
-    @PostMapping("signup")
+    @PostMapping("/signup")
     public ResponseEntity<SignUpResponse> registerUser(@RequestBody SignupRequest signupRequest){
         return authService.registerUser(signupRequest);
     }
@@ -40,6 +42,15 @@ public class AuthController {
     @GetMapping("/account-info")
     public ResponseEntity<AccountDto> getAccountInfo(Authentication auth){
         return new ResponseEntity<>(userService.getAccountInfo(auth), HttpStatus.OK);
+    }
+    @PatchMapping("/update")
+    public ResponseEntity<Object> updateUser(Authentication auth, User userInfo){
+        userService.updateUser(auth, userInfo);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+    @PostMapping("/check")
+    public ResponseEntity<Object> checkUser(@RequestBody LoginRequest loginRequest, Authentication auth){
+        return authService.authenticateUserNoJwt(loginRequest, auth);
     }
 }
 

@@ -9,5 +9,6 @@ import java.util.List;
 public interface BotRepository extends JpaRepository<Bot, Long> {
     List<Bot> findAllByBotName(String botName);
     List<Bot> findAllByUser(User user);
+    List<Bot> findAllByUserAndPriceSoldIsNull(User user);
     List<Bot> findAllByUserAndPriceSoldIsNotNull(User user);
 }

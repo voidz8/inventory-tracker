@@ -7,20 +7,20 @@ import java.time.LocalDate;
 @Data
 public class DataDto {
     private LocalDate date;
-    private long priceBought;
-    private long priceSold;
+    private long buy;
+    private long sell;
 
     public DataDto() {
     }
 
-    public DataDto(LocalDate date, long priceBought) {
+    public DataDto(LocalDate date, long buy) {
         this.date = date;
-        this.priceBought = priceBought;
+        this.buy = buy;
     }
 
-    public DataDto(LocalDate date, long priceBought, long priceSold) {
+    public DataDto(LocalDate date, long buy, long sell) {
         this.date = date;
-        this.priceBought = priceBought;
-        this.priceSold = priceSold;
+        this.buy = buy;
+        this.sell = sell;
     }
 }

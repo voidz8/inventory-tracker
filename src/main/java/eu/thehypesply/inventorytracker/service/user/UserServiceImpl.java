@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -14,6 +15,9 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private PasswordEncoder encoder;
 
     @Override
     public Long getUserIdFromUsername(String username){
@@ -33,5 +37,20 @@ public class UserServiceImpl implements UserService {
             String username = userDetails.getUsername();
             User user = getUserByUsername(username);
             return new AccountDto(user.getId(), username, userDetails.getEmail());
+    }
+
+    @Override
+    public ResponseEntity<Object> updateUser(Authentication auth, User userInfo) {
+        UserDetailsImpl userDetails = (UserDetailsImpl) auth.getPrincipal();
+        String username = userDetails.getUsername();
+        User user = getUserByUsername(username);
+        if (userRepository.existsByUsername(userInfo.getUsername())){
+            return ResponseEntity.badRequest().body("Username already exists");
+        } else {
+            user.setEmail(userInfo.getEmail());
+            user.setPassword(encoder.encode(userInfo.getPassword()));
+            user.setUsername(userInfo.getUsername());
+            userRepository.save(user);
+            return ResponseEntity.ok("Succesfully updated user");}
     }
 }

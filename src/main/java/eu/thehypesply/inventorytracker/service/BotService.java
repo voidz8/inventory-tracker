@@ -2,6 +2,7 @@ package eu.thehypesply.inventorytracker.service;
 
 import eu.thehypesply.inventorytracker.dto.DataDto;
 import eu.thehypesply.inventorytracker.model.Bot;
+import eu.thehypesply.inventorytracker.model.Image;
 import org.springframework.security.core.Authentication;
 
 import java.util.List;
@@ -14,7 +15,9 @@ public interface BotService {
 
     Optional<Bot> getBot(long id);
 
-    String createBot(Bot bot);
+    List<Bot> getAllSoldBots(Authentication auth);
+
+    String createBot(Bot bot, Authentication auth, Image image);
 
     void deleteBot(long id);
 
@@ -25,6 +28,8 @@ public interface BotService {
     long totalBotSales();
 
     long totalBalance();
+
+    void sellBot(long id, Long priceSold);
 
     List<DataDto> getBotData(Authentication auth);
 }

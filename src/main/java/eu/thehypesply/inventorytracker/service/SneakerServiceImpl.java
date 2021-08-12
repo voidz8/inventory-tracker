@@ -1,31 +1,21 @@
 package eu.thehypesply.inventorytracker.service;
 
-import eu.thehypesply.inventorytracker.dto.DataBoughtDto;
 import eu.thehypesply.inventorytracker.dto.DataDto;
-import eu.thehypesply.inventorytracker.dto.DataSoldDto;
 import eu.thehypesply.inventorytracker.exception.SneakerNotFound;
 import eu.thehypesply.inventorytracker.exception.UserNotFoundException;
 import eu.thehypesply.inventorytracker.model.Image;
-import eu.thehypesply.inventorytracker.model.Item;
 import eu.thehypesply.inventorytracker.model.Sneaker;
 import eu.thehypesply.inventorytracker.model.User;
 import eu.thehypesply.inventorytracker.repository.SneakerRepository;
-import eu.thehypesply.inventorytracker.repository.TotalRepository;
 import eu.thehypesply.inventorytracker.repository.UserRepository;
 import eu.thehypesply.inventorytracker.service.user.UserDetailsImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
 
-import javax.imageio.ImageIO;
-import java.awt.image.BufferedImage;
-import java.io.ByteArrayInputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -40,15 +30,9 @@ public class SneakerServiceImpl implements SneakerService {
     @Autowired
     private UserRepository userRepository;
 
-    @Autowired
-    private ImageService imageService;
-
-    @Autowired
-    private TotalRepository totalRepository;
-
 
     public List<Sneaker> getAllSneakers(User user) {
-        List<Sneaker> sneakers = sneakerRepository.findAllByUser(user);
+        List<Sneaker> sneakers = sneakerRepository.findAllByUserAndPriceSoldIsNull(user);
         Collections.sort(sneakers);
         return sneakers;
     }
@@ -63,10 +47,11 @@ public class SneakerServiceImpl implements SneakerService {
         UserDetailsImpl userDetails = (UserDetailsImpl) auth.getPrincipal();
         User user = userRepository.findByUsername(userDetails.getUsername()).orElseThrow(() -> new UserNotFoundException("User not found")
         );
-        sneaker.setDateBought(LocalDate.now());
-        sneaker.setUser(user);
-        sneaker.setImage(image);
-        sneakerRepository.save(sneaker);
+        Sneaker newSneaker = new Sneaker(sneaker);
+        newSneaker.setDateBought(LocalDate.now());
+        newSneaker.setUser(user);
+        newSneaker.setImage(image);
+        sneakerRepository.save(newSneaker);
         return sneaker;
     }
 
@@ -94,9 +79,6 @@ public class SneakerServiceImpl implements SneakerService {
                 case "priceBought":
                     sneaker.setPriceBought((Integer) fields.get(field));
                     break;
-                case "salePrice":
-                    sneaker.setSalePrice((Integer) fields.get(field));
-                    break;
             }
         }
         sneakerRepository.save(sneaker);
@@ -118,7 +100,7 @@ public class SneakerServiceImpl implements SneakerService {
         List<Sneaker> sneakers = sneakerRepository.findAll();
         long total = 0;
         for (Sneaker sneaker : sneakers) {
-            long value = sneaker.getSalePrice();
+            long value = sneaker.getPriceSold();
             total = total + value;
         }
         return total;
@@ -132,10 +114,10 @@ public class SneakerServiceImpl implements SneakerService {
 
 
     @Override
-    public void sold(long id, int priceSold) {
+    public void sold(long id, Long priceSold) {
         Sneaker sneaker = sneakerRepository.findById(id).get();
         sneaker.setDateSold(LocalDate.now());
-        sneaker.setSalePrice(priceSold);
+        sneaker.setPriceSold(priceSold);
         sneakerRepository.save(sneaker);
     }
 
@@ -154,7 +136,7 @@ public class SneakerServiceImpl implements SneakerService {
             if (sneaker.getDateSold() != null && sneaker.getDateSold().isAfter(LocalDate.now().minusDays(30))) {
                 DataDto dataSoldDto = new DataDto();
                 dataSoldDto.setDate(sneaker.getDateSold());
-                dataSoldDto.setPriceSold(sneaker.getSalePrice());
+                dataSoldDto.setSell(sneaker.getPriceSold());
                 itemData.add(dataSoldDto);
             }
         }
@@ -165,8 +147,8 @@ public class SneakerServiceImpl implements SneakerService {
         for (DataDto sorteditem : sortedData){
             for (DataDto item: itemData) {
                 if (item.getDate().equals(sorteditem.getDate())){
-                    sorteditem.setPriceSold(sorteditem.getPriceSold()+ item.getPriceSold());
-                    sorteditem.setPriceBought(sorteditem.getPriceBought() + item.getPriceBought());
+                    sorteditem.setSell(sorteditem.getSell()+ item.getSell());
+                    sorteditem.setBuy(sorteditem.getBuy() + item.getBuy());
                 }
             }
         }
@@ -178,7 +160,6 @@ public class SneakerServiceImpl implements SneakerService {
     public List<Sneaker> getAllSoldSneakers(Authentication auth) {
         UserDetailsImpl userDetails = (UserDetailsImpl) auth.getPrincipal();
         User user = userRepository.findByUsername(userDetails.getUsername()).orElseThrow(UserNotFoundException::new);
-        return sneakerRepository.findAllByUserAndSalePriceIsNotNull(user);
+        return sneakerRepository.findAllByUserAndPriceSoldIsNotNull(user);
     }
-
 }

@@ -19,12 +19,12 @@ public class Item {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private Long id;
 
     private String itemName;
     private String itemSize;
     private long priceBought;
-    private Integer priceSold;
+    private Long priceSold;
     private LocalDate dateBought;
     private LocalDate dateSold;
     @OneToOne(cascade = CascadeType.ALL)

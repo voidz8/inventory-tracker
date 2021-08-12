@@ -36,7 +36,7 @@ public class ItemServiceImpl implements ItemService {
     public List<Item> getAllItems(Authentication auth) {
         UserDetailsImpl userDetails = (UserDetailsImpl) auth.getPrincipal();
         User user = userService.getUserByUsername(userDetails.getUsername());
-        return itemRepository.findAllByUser(user);
+        return itemRepository.findAllByUserAndPriceSoldIsNull(user);
     }
 
     @Override
@@ -76,9 +76,6 @@ public class ItemServiceImpl implements ItemService {
                     break;
                 case "priceBought":
                     item.setPriceBought((Integer) fields.get(field));
-                    break;
-                case "priceSold":
-                    item.setPriceSold((Integer) fields.get(field));
                     break;
             }
         }
@@ -128,7 +125,7 @@ public class ItemServiceImpl implements ItemService {
             if (item.getDateSold() != null && item.getDateSold().isAfter(LocalDate.now().minusDays(30))) {
                 DataDto dataSoldDto = new DataDto();
                 dataSoldDto.setDate(item.getDateSold());
-                dataSoldDto.setPriceSold(item.getPriceSold());
+                dataSoldDto.setSell(item.getPriceSold());
                 itemData.add(dataSoldDto);
             }
         }
@@ -139,8 +136,8 @@ public class ItemServiceImpl implements ItemService {
         for (DataDto sorteditem : sortedData) {
             for (DataDto item : itemData) {
                 if (item.getDate().equals(sorteditem.getDate())) {
-                    sorteditem.setPriceSold(sorteditem.getPriceSold() + item.getPriceSold());
-                    sorteditem.setPriceBought(sorteditem.getPriceBought() + item.getPriceBought());
+                    sorteditem.setSell(sorteditem.getSell() + item.getSell());
+                    sorteditem.setBuy(sorteditem.getBuy() + item.getBuy());
                 }
             }
         }
@@ -157,7 +154,7 @@ public class ItemServiceImpl implements ItemService {
     }
 
     @Override
-    public void sell(long id, int priceSold) {
+    public void sell(long id, Long priceSold) {
         Item item = itemRepository.findById(id).get();
         item.setDateSold(LocalDate.now());
         item.setPriceSold(priceSold);

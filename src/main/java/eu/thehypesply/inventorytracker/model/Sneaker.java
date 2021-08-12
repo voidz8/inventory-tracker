@@ -25,13 +25,13 @@ public class Sneaker implements Comparable<Sneaker> {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private Long id;
 
     private String pid;
     private String sneakerName;
     private long sneakerSize;
     private long priceBought;
-    private Integer salePrice;
+    private Long priceSold;
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "image_id", referencedColumnName = "id")
     private Image image;
@@ -46,6 +46,15 @@ public class Sneaker implements Comparable<Sneaker> {
     @JoinColumn(name = "user_id")
     private User user;
 
+    public Sneaker() {
+    }
+
+    public Sneaker(Sneaker sneaker) {
+        this.pid = sneaker.getPid();
+        this.sneakerName = sneaker.getSneakerName();
+        this.sneakerSize = sneaker.getSneakerSize();
+        this.priceBought = sneaker.getPriceBought();
+    }
 
     @Override
     public int compareTo(Sneaker o) {

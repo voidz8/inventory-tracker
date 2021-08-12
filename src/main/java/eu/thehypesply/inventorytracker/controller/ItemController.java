@@ -1,5 +1,6 @@
 package eu.thehypesply.inventorytracker.controller;
 
+import eu.thehypesply.inventorytracker.dto.PriceSoldDto;
 import eu.thehypesply.inventorytracker.model.Image;
 import eu.thehypesply.inventorytracker.model.Item;
 import eu.thehypesply.inventorytracker.service.ImageService;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -90,8 +92,8 @@ public class ItemController {
     }
 
     @PostMapping(value = "/sell/{id}")
-    public ResponseEntity<Object> sellItem(long id, int priceSold){
-        itemService.sell(id, priceSold);
+    public ResponseEntity<Object> sellItem(@PathVariable("id") long id, @RequestBody PriceSoldDto priceSold){
+        itemService.sell(id, priceSold.getPriceSold());
         return new ResponseEntity<>(HttpStatus.OK);
     }
 }
